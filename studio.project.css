@@ -6,3 +6,9 @@
 /* Os exemplos do design system foram pensados para superfície branca (o link, por exemplo, só passa no contraste AA sobre branco).
    Na Wiki, a área de exemplo (.preview) vira branca dentro da página do design system. */
 .wiki .dsx .preview{background:var(--bg-surface);border-color:var(--border-subdued)}
+
+/* Campo de senha: o botão de mostrar ou ocultar fica dentro do campo, então o texto não pode passar por baixo dele. */
+.auth-pw .sv-box__input{padding-right:var(--space-40)}
+
+/* Tokens de ilustração do Figma (Color/Illustration/Gmail/*), usados no mockup de cliente de e-mail. Ainda não existem no pacote do design system. */
+.dsx{--illustration-gmail-202124:#202124;--illustration-gmail-35363a:#35363a;--illustration-gmail-d3e2fd:#d3e2fd;--illustration-gmail-001d35:#001d35;--illustration-gmail-c2e7ff:#c2e7ff}
