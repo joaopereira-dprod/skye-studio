@@ -1,0 +1,8 @@
+{
+  "name": "skye-advantage",
+  "platform": "desktop",
+  "project": "studio.project.js",
+  "tokens": "tokens/tokens.json",
+  "components": "src/components",
+  "watch": ["src", "tokens", "design"]
+}

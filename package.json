@@ -1,0 +1,19 @@
+{
+  "name": "skye-advantage",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "studio history && studio dev",
+    "build": "studio build",
+    "check": "studio history && studio check",
+    "history": "studio history",
+    "governance": "studio governance",
+    "studio": "studio history && studio build"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "studio-engine": "file:vendor/studio-engine-0.3.10.tgz"
+  }
+}
