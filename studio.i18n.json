@@ -57,7 +57,7 @@
     "Em análise": "Under review",
     "Recusado": "Declined",
     "E-mail": "Email",
-    "Perfil": "Role",
+    "Perfil": "Profile",
     "Franqueado": "Franchisee",
     "Orçamentista": "Estimator",
     "Administradora": "Administrator",
@@ -145,6 +145,11 @@
     "Elevação. Quanto maior o número, mais o elemento flutua sobre a tela.": "Elevation. The higher the number, the more the element floats above the screen.",
     "Família Inter. Cada estilo vira uma classe, por exemplo .t-title-lg.": "Inter family. Each style becomes a class, for example .t-title-lg.",
     "Formulário": "Form",
-    "ESTILOS DE TEXTO": "TEXT STYLES"
+    "ESTILOS DE TEXTO": "TEXT STYLES",
+    "Menu principal": "Main menu",
+    "Administrador corporativo": "Corporate Admin",
+    "Expandir menu": "Expand menu",
+    "Recolher menu": "Collapse menu",
+    "Trocar franquia": "Switch franchise"
   }
 }
