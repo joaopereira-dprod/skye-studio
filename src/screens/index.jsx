@@ -6,7 +6,7 @@ import { Usuarios } from './Usuarios.jsx';
 import { Login } from './auth/Login.jsx';
 import { EsqueciSenha } from './auth/EsqueciSenha.jsx';
 import { DefinirSenha } from './auth/DefinirSenha.jsx';
-import { SenhaDefinida, LinkEnviado } from './auth/Confirmacoes.jsx';
+import { SenhaDefinida, LinkEnviado, LinkConviteExpirado } from './auth/Confirmacoes.jsx';
 import { EmailConvite } from './auth/EmailConvite.jsx';
 export const SCREENS = [
   // Autenticação (Figma: Authentication). O protótipo abre no login.
@@ -16,6 +16,7 @@ export const SCREENS = [
   { id: 'email-convite', label: 'E-mail de convite', group: 'Autenticação', Component: EmailConvite, figma: '319-9137' },
   { id: 'definir-senha', label: 'Definir senha', group: 'Autenticação', Component: DefinirSenha, figma: '326-2' },
   { id: 'senha-definida', label: 'Senha definida', group: 'Autenticação', Component: SenhaDefinida, figma: '326-7846' },
+  { id: 'link-convite-expirado', label: 'Link do convite expirado', group: 'Autenticação', Component: LinkConviteExpirado, figma: '8531-54652' },
   { id: 'projetos', label: 'Projetos', group: 'Operação', Component: Projetos, figma: null },
   { id: 'leads', label: 'Leads e clientes', group: 'Operação', Component: Leads, figma: null },
   { id: 'orcamentos', label: 'Orçamentos', group: 'Operação', Component: Orcamentos, figma: null },

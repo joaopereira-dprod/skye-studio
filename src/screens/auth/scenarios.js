@@ -6,5 +6,6 @@ export const SCENARIOS = {
   loginDisabled: { email: 'inativo@popstand.com' },
   offline: { email: 'offline@popstand.com' },
   maxAttempts: 3,
-  leakedPassword: 'Password1!',
+  reusedPassword: DEMO.password, // a senha que a conta já usa
+  invitedBy: 'Carlos Ribeiro',
 };

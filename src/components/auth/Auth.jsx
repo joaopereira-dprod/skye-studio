@@ -44,16 +44,17 @@ export function AuthCard({ title, subtitle, children, label }) {
   );
 }
 
-/** AuthSuccessCard: confirmação de sucesso, com ícone, texto e um botão. */
-export function AuthSuccessCard({ title, text, cta, onCta }) {
+/** AuthSuccessCard: cartão de resultado, com ícone, texto e (opcional) um botão. `tone="error"` troca o ícone e as cores (ex.: link expirado). */
+export function AuthSuccessCard({ title, text, cta, onCta, tone = 'success' }) {
+  const bad = tone === 'error';
   return (
     <section aria-labelledby="auth-success-title" className="flex w-[460px] max-w-full flex-none flex-col items-center justify-center gap-[var(--space-40)] overflow-hidden rounded-[var(--radius-lg)] bg-[var(--bg-surface)] p-[var(--space-32)] shadow-[inset_0_0_0_1px_var(--border-default),var(--shadow-400)]">
-      <div className="flex size-[var(--space-56)] flex-none items-center justify-center rounded-full bg-[var(--bg-success-strong)] text-[color:var(--text-success-strong)]"><Icon name="check" size={28} /></div>
-      <div role="status" className="flex w-full flex-col items-center gap-[var(--space-4)] text-center">
+      <div className={`flex size-[var(--space-56)] flex-none items-center justify-center rounded-full ${bad ? 'bg-[var(--bg-critical-strong)] text-[color:var(--text-critical-strong)]' : 'bg-[var(--bg-success-strong)] text-[color:var(--text-success-strong)]'}`}><Icon name={bad ? 'x' : 'check'} size={28} /></div>
+      <div role={bad ? 'alert' : 'status'} className="flex w-full flex-col items-center gap-[var(--space-4)] text-center">
         <h1 id="auth-success-title" className="t-title-sm w-full text-[color:var(--text-primary)]">{title}</h1>
         <p className="t-body-md w-full text-[color:var(--text-secondary)]">{text}</p>
       </div>
-      <Button className="w-full" onClick={onCta} autoFocus>{cta}</Button>
+      {cta && <Button className="w-full" onClick={onCta} autoFocus>{cta}</Button>}
     </section>
   );
 }
@@ -66,12 +67,12 @@ export function InlineLink({ children, onClick }) {
 const EyeOff = <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49M14.084 14.158a3 3 0 0 1-4.242-4.242M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143M2 2l20 20" />;
 
 /** Campo de senha: Input do design system com o botão de mostrar ou ocultar dentro do campo (ícone do Figma). */
-export const PasswordField = forwardRef(function PasswordField({ label, error, ...rest }, ref) {
+export const PasswordField = forwardRef(function PasswordField({ label, error, invalid, ...rest }, ref) {
   const [shown, setShown] = useState(false);
   const toggle = shown ? t('Ocultar senha') : t('Mostrar senha');
   return (
-    <div className="auth-pw relative w-full">
-      <Input ref={ref} label={label} error={error} type={shown ? 'text' : 'password'} autoComplete="current-password" {...rest} />
+    <div className={`auth-pw relative w-full${invalid ? ' auth-invalid' : ''}`}>
+      <Input ref={ref} label={label} error={error} type={shown ? 'text' : 'password'} autoComplete="current-password" {...(invalid ? { 'aria-invalid': true } : {})} {...rest} />
       <button type="button" onClick={() => setShown((s) => !s)} aria-label={toggle} title={toggle} aria-pressed={shown}
         className="absolute right-[var(--space-8)] top-[calc(18px+var(--space-4)+var(--space-4))] flex size-[var(--space-32)] items-center justify-center rounded-[var(--radius-sm)] bg-transparent text-[color:var(--icon-default)] hover:bg-[var(--bg-surface-subdued)] focus-visible:shadow-[var(--shadow-focusRing)] focus-visible:outline-none">
         {shown

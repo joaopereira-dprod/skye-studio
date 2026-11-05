@@ -8,8 +8,9 @@ const SCREENS_DOC = [
   { id: 'esqueci-senha', node: '326-7751', name: { pt: 'Esqueci a senha', en: 'Forgot password' }, text: { pt: 'Pede o e-mail e envia o link de redefinição. Tem o link “Voltar ao login”.', en: 'Asks for the email and sends the reset link. Has a “Back to login” link.' } },
   { id: 'link-enviado', node: '326-7862', name: { pt: 'Link enviado', en: 'Password reset sent' }, text: { pt: 'Confirma o envio, mostrando o e-mail digitado.', en: 'Confirms the send, showing the typed email.' } },
   { id: 'email-convite', node: '319-9137', name: { pt: 'E-mail de convite', en: '[Email] Set a password' }, text: { pt: 'O e-mail que o novo usuário recebe, dentro do mockup de cliente de e-mail. O botão “Definir senha” abre a próxima tela.', en: 'The email a new user receives, inside the email client mockup. The “Set Password” button opens the next screen.' } },
-  { id: 'definir-senha', node: '326-2', name: { pt: 'Definir senha', en: 'Set a password' }, text: { pt: 'Nova senha, confirmação e lista de requisitos que reage ao que se digita.', en: 'New password, confirmation and a requirements list that reacts to typing.' } },
+  { id: 'definir-senha', node: '326-2', name: { pt: 'Definir senha', en: 'Set a password' }, text: { pt: 'Primeiro acesso por convite: boas-vindas com o e-mail e o perfil, nova senha, confirmação e uma lista de requisitos que reage ao que se digita.', en: 'First access by invitation: welcome with the email and role, new password, confirmation and a requirements list that reacts to typing.' } },
   { id: 'senha-definida', node: '326-7846', name: { pt: 'Senha definida', en: 'Password set success' }, text: { pt: 'Confirma que a senha foi criada e leva ao login.', en: 'Confirms the password was created and leads to login.' } },
+  { id: 'link-convite-expirado', node: '8531-54652', name: { pt: 'Link do convite expirado', en: 'Invite link expired' }, text: { pt: 'Cartão de erro, sem botão: o link do convite venceu e a pessoa deve procurar quem a convidou.', en: 'Error card with no button: the invite link expired and the person must reach out to whoever invited them.' } },
 ];
 
 const FIGMA = 'https://www.figma.com/design/SPElEKzaDCu32XXersJofk/SkyeVantage-ERP---v2';
@@ -26,8 +27,9 @@ const ROWS = [
   [{ pt: 'Esqueci a senha', en: 'Forgot password' }, { pt: 'Qualquer e-mail válido', en: 'Any valid email' }, { pt: 'Carrega e abre “Confira sua caixa de entrada!”. A resposta é a mesma exista a conta ou não, para não revelar quem tem cadastro.', en: 'Loads and opens “Check your inbox!”. The answer is the same whether the account exists or not, so it does not reveal who is registered.' }],
   [{ pt: 'Definir senha', en: 'Set a password' }, { pt: 'Começar a digitar a nova senha', en: 'Start typing the new password' }, { pt: 'Cada requisito fica verde (cumprido) ou vermelho (falta), na hora. Antes de digitar, ficam neutros.', en: 'Each requirement turns green (met) or red (missing), instantly. Before typing, they are neutral.' }],
   [{ pt: 'Definir senha', en: 'Set a password' }, { pt: 'Enviar com requisitos faltando', en: 'Submit with missing requirements' }, { pt: 'Erro “A senha ainda não cumpre todos os requisitos.” e foco no campo.', en: 'Error “Your password doesn’t meet all the requirements yet.” and focus on the field.' }],
-  [{ pt: 'Definir senha', en: 'Set a password' }, { pt: 'Confirmação diferente da senha', en: 'Confirmation different from the password' }, { pt: 'Erro no campo de confirmação: “As senhas não são iguais.”', en: 'Error on the confirmation field: “The passwords don’t match.”' }],
-  [{ pt: 'Definir senha', en: 'Set a password' }, { pt: `Senha ${SCENARIOS.leakedPassword} (cumpre os requisitos)`, en: `Password ${SCENARIOS.leakedPassword} (meets the requirements)` }, { pt: 'Aviso de erro “Escolha outra senha”: a senha apareceu em vazamentos.', en: 'Error banner “Choose a different password”: the password appeared in breaches.' }],
+  [{ pt: 'Definir senha', en: 'Set a password' }, { pt: 'Confirmação diferente da senha', en: 'Confirmation different from the password' }, { pt: 'Os dois campos ficam com borda vermelha e a mensagem “As senhas não coincidem” aparece sob a confirmação.', en: 'Both fields get a red border and the message “Passwords do not match” appears under the confirmation.' }],
+  [{ pt: 'Definir senha', en: 'Set a password' }, { pt: `Senha ${SCENARIOS.reusedPassword} (a que a conta já usa)`, en: `Password ${SCENARIOS.reusedPassword} (the one the account already uses)` }, { pt: 'Só o campo da nova senha fica vermelho, com “Você não pode reutilizar uma senha anterior.”', en: 'Only the new password field turns red, with “You cannot reuse a previous password”.' }],
+  [{ pt: 'Link do convite expirado', en: 'Invite link expired' }, { pt: 'Abrir a tela pela lista de telas do Studio', en: 'Open the screen from the Studio screen list' }, { pt: 'Cartão de erro com o nome de quem convidou. Em um sistema real, esta tela aparece no lugar do formulário quando o link do convite já venceu.', en: 'Error card with the name of whoever invited. In a real system, this screen replaces the form when the invite link has already expired.' }],
   [{ pt: 'Definir senha', en: 'Set a password' }, { pt: 'Qualquer senha válida, igual na confirmação', en: 'Any valid password, matching the confirmation' }, { pt: 'Carrega e abre “Tudo pronto!”.', en: 'Loads and opens “You’re all set!”.' }],
 ];
 
@@ -55,7 +57,7 @@ export function AuthFlowPage() {
       </section>
       <section>
         <h4>{t('Feedbacks usados')}</h4>
-        <p className="st-body-sm">{t('Erro de campo: Input com error. Falha geral: Banner de erro. Bloqueio por tentativas: Banner de aviso. Carregando: Button com loading. Sucesso: cartão de confirmação (AuthSuccessCard) e aviso ao entrar no app.')}</p>
+        <p className="st-body-sm">{t('Erro de campo: Input com error (ou só a borda, quando a mensagem está no campo vizinho). Falha geral: Banner de erro. Bloqueio por tentativas: Banner de aviso. Carregando: Button com loading. Sucesso: cartão de confirmação (AuthSuccessCard) e aviso ao entrar no app.')}</p>
       </section>
     </div>
   );

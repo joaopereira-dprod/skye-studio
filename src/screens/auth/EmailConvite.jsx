@@ -13,7 +13,7 @@ export function EmailConvite({ go }) {
         <AuthHeader gap="var(--space-24)" width={500}
           title={t('João, você foi convidado para a SkyeVantage!')}
           subtitle={t('Seu e-mail {email} foi convidado como novo usuário. Crie sua senha pelo link abaixo para começar.').replace('{email}', 'example@email.com')} />
-        <Button onClick={() => go('definir-senha')}>{t('Definir senha')}</Button>
+        <Button onClick={() => go('definir-senha', { inviteEmail: 'example@email.com' })}>{t('Definir senha')}</Button>
       </EmailClient>
     </div>
   );
