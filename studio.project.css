@@ -12,3 +12,7 @@
 
 /* Tokens de ilustração do Figma (Color/Illustration/Gmail/*), usados no mockup de cliente de e-mail. Ainda não existem no pacote do design system. */
 .dsx{--illustration-gmail-202124:#202124;--illustration-gmail-35363a:#35363a;--illustration-gmail-d3e2fd:#d3e2fd;--illustration-gmail-001d35:#001d35;--illustration-gmail-c2e7ff:#c2e7ff}
+
+/* Reset das margens do navegador (h1, p, ul…) dentro das telas do projeto. Sem ele o título ganhava 13px e o parágrafo 14px que não existem no Figma.
+   O seletor inteiro fica dentro de :where (especificidade zero): qualquer classe de espaçamento continua valendo. */
+:where(.dsx) :where(h1,h2,h3,h4,h5,h6,p,ul,ol,dl,figure,blockquote,form,fieldset,pre){margin:0}

@@ -2,7 +2,7 @@ import { Shell, Table, Status, Stat } from '../components/Shell.jsx';
 export function Projetos({ go }) {
   return (
     <Shell active="projetos" go={go} title="Projetos" action="Novo projeto">
-      <div className="mb-6 grid grid-cols-4 gap-4">
+      <div className="mb-[var(--space-24)] grid grid-cols-4 gap-[var(--space-16)]">
         <Stat label="Em andamento" value="12" />
         <Stat label="Aguardando material" value="4" />
         <Stat label="Concluídos no mês" value="9" />

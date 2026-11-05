@@ -69,8 +69,8 @@ const NAV = [
 function Browser() {
   return (
     <div aria-hidden="true" className="flex-none overflow-hidden rounded-t-[var(--radius-md)] bg-[var(--illustration-gmail-202124)]">
-      <div className="flex h-6 items-center gap-2 px-2"><Img src={dotRed} size={10} /><Img src={dotYellow} size={10} className="ml-2" /><Img src={dotGreen} size={10} className="ml-2" /></div>
-      <div className="flex h-12 items-center gap-[var(--space-24)] bg-[var(--illustration-gmail-35363a)] pl-2 pr-[var(--space-4)]">
+      <div className="flex h-6 items-center gap-[var(--space-8)] px-[var(--space-8)]"><Img src={dotRed} size={10} /><Img src={dotYellow} size={10} className="ml-[var(--space-8)]" /><Img src={dotGreen} size={10} className="ml-[var(--space-8)]" /></div>
+      <div className="flex h-12 items-center gap-[var(--space-24)] bg-[var(--illustration-gmail-35363a)] pl-[var(--space-8)] pr-[var(--space-4)]">
         <Img src={arrowBack} size={28} /><Img src={arrowForward} size={28} /><Img src={refresh} size={28} />
         <div className="flex min-w-0 flex-1 items-center gap-[var(--space-12)] rounded-full bg-[var(--illustration-gmail-202124)] py-[var(--space-8)] pl-[var(--space-16)] pr-[var(--space-8)]">
           <img src={lock} alt="" width={10} height={13} className="flex-none" />
@@ -102,7 +102,7 @@ function Header() {
 function Nav() {
   return (
     <nav aria-hidden="true" className="flex w-[256px] flex-none flex-col">
-      <div className="h-[72px] flex-none px-2 pt-2">
+      <div className="h-[72px] flex-none px-[var(--space-8)] pt-[var(--space-8)]">
         <div className="inline-flex items-center gap-[var(--space-16)] rounded-[var(--radius-xl)] bg-[var(--illustration-gmail-c2e7ff)] py-[var(--space-16)] pl-[var(--space-16)] pr-[var(--space-20)]">
           <Img src={composeEdit} size={24} /><span className="t-label-lg text-[color:var(--illustration-gmail-001d35)]">Compose</span>
         </div>
@@ -110,9 +110,9 @@ function Nav() {
       <ul className="m-0 flex list-none flex-col p-0 pr-[var(--space-16)]">
         {NAV.map((n) => (
           <li key={n.label} className={`relative flex h-8 items-center rounded-r-full ${n.active ? 'bg-[var(--illustration-gmail-d3e2fd)]' : ''}`}>
-            <span className="absolute left-[25px] flex"><Img src={n.icon} /></span>
-            <span className={`ml-16 ${n.active ? 't-label-lg text-[color:var(--illustration-gmail-001d35)]' : n.strong ? 't-label-lg text-[color:var(--illustration-gmail-202124)]' : 't-body-md text-[color:var(--illustration-gmail-202124)]'}`}>{n.label}</span>
-            {n.count && <span className={`t-label-sm absolute right-3 ${n.active ? 'text-[color:var(--illustration-gmail-001d35)]' : 'text-[color:var(--text-secondary)]'}`}>{n.count}</span>}
+            <span className="absolute left-[var(--space-24)] flex"><Img src={n.icon} /></span>
+            <span className={`ml-[var(--space-64)] ${n.active ? 't-label-lg text-[color:var(--illustration-gmail-001d35)]' : n.strong ? 't-label-lg text-[color:var(--illustration-gmail-202124)]' : 't-body-md text-[color:var(--illustration-gmail-202124)]'}`}>{n.label}</span>
+            {n.count && <span className={`t-label-sm absolute right-[var(--space-12)] ${n.active ? 'text-[color:var(--illustration-gmail-001d35)]' : 'text-[color:var(--text-secondary)]'}`}>{n.count}</span>}
           </li>
         ))}
       </ul>
@@ -133,15 +133,15 @@ function AppBar() {
 function Toolbar() {
   return (
     <div aria-hidden="true" className="relative flex h-12 flex-none items-center rounded-t-[var(--radius-xl)] bg-[var(--bg-surface)]">
-      <span className="absolute left-4"><Img src={tbArrowBack} /></span>
-      <div className="ml-[72px] flex items-center gap-[var(--space-20)]">
+      <span className="absolute left-[var(--space-16)]"><Img src={tbArrowBack} /></span>
+      <div className="ml-[var(--space-72)] flex items-center gap-[var(--space-20)]">
         <div className="flex items-start gap-[var(--space-24)]"><Img src={tbArchive} /><Img src={tbReport} /><Img src={tbDelete} /></div>
         <Sep src={tbLine} />
         <div className="flex items-start gap-[var(--space-24)]"><Img src={tbMail} /><Img src={tbSchedule} /><Img src={tbAddTask} /></div>
         <Sep src={tbLine2} />
         <div className="flex items-start gap-[var(--space-24)]"><Img src={tbMove} /><Img src={tbLabel} /><Img src={tbMoreVert} /></div>
       </div>
-      <div className="absolute right-7 flex items-center"><Img src={tbChevronLeft} className="mr-5" /><Img src={tbChevronRight} className="mr-5" /><Img src={tbLang} /><Img src={tbDropDown} /></div>
+      <div className="absolute right-[var(--space-28)] flex items-center"><Img src={tbChevronLeft} className="mr-[var(--space-20)]" /><Img src={tbChevronRight} className="mr-[var(--space-20)]" /><Img src={tbLang} /><Img src={tbDropDown} /></div>
     </div>
   );
 }
@@ -155,16 +155,16 @@ export function EmailClient({ subject, children }) {
       <Header />
       <div className="flex min-h-0 flex-1">
         <Nav />
-        <main className="mt-2 flex min-w-0 flex-1 flex-col">
+        <main className="mt-[var(--space-8)] flex min-w-0 flex-1 flex-col">
           <Toolbar />
-          <div className="flex h-14 flex-none items-center gap-[var(--space-16)] bg-[var(--bg-surface)] pl-[72px] pr-8">
+          <div className="flex h-14 flex-none items-center gap-[var(--space-16)] bg-[var(--bg-surface)] pl-[var(--space-72)] pr-[var(--space-32)]">
             <h2 className="t-body-2xl m-0 text-[color:var(--text-primary)]">{subject}</h2>
             <span aria-hidden="true" className="flex"><Img src={labelImportantLg} size={24} /></span>
             <span aria-hidden="true" className="ml-auto flex gap-[var(--space-16)]"><Img src={print} /><Img src={openInNew} /></span>
           </div>
           <div className="relative flex h-20 flex-none items-start bg-[var(--bg-surface)]">
-            <div aria-hidden="true" className="flex h-20 w-[72px] flex-none items-center justify-center"><Img src={sender} size={40} /></div>
-            <div className="mt-5 flex min-w-0 flex-1 flex-col gap-[var(--space-4)]">
+            <div aria-hidden="true" className="flex h-20 w-[var(--space-72)] flex-none items-center justify-center"><Img src={sender} size={40} /></div>
+            <div className="mt-[var(--space-20)] flex min-w-0 flex-1 flex-col gap-[var(--space-4)]">
               <div className="flex items-center gap-[var(--space-4)] whitespace-nowrap">
                 <span className="t-label-lg text-[color:var(--text-primary)]">SkyeVantage</span>
                 <span className="t-body-xs text-[color:var(--text-secondary)]">&lt;noreply@skyevantage.com&gt;</span>
@@ -172,8 +172,10 @@ export function EmailClient({ subject, children }) {
               </div>
               <div className="flex items-center"><span className="t-label-sm text-[color:var(--text-secondary)]">to me</span><span aria-hidden="true" className="flex"><Img src={menuDown} /></span></div>
             </div>
-            <span className="t-body-xs mt-6 whitespace-nowrap pr-[154px] text-[color:var(--text-secondary)]">Wed, Sep 15, 8:07 AM (2 days ago)</span>
-            <span aria-hidden="true" className="absolute right-[33px] top-5 flex gap-[var(--space-24)]"><Img src={star} /><Img src={reply} /><Img src={moreVert} /></span>
+            <div className="ml-auto flex items-center gap-[var(--space-12)] pr-[var(--space-32)] pt-[var(--space-20)]">
+              <span className="t-body-xs whitespace-nowrap text-[color:var(--text-secondary)]">Wed, Sep 15, 8:07 AM (2 days ago)</span>
+              <span aria-hidden="true" className="flex gap-[var(--space-24)]"><Img src={star} /><Img src={reply} /><Img src={moreVert} /></span>
+            </div>
           </div>
           <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-[var(--space-32)] overflow-auto rounded-b-[var(--radius-md)] bg-[var(--bg-surface)] pt-[var(--space-48)]">{children}</div>
         </main>

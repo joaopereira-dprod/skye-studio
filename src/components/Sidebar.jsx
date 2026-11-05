@@ -80,7 +80,7 @@ function MenuItem({ item, active, onClick, compact, expanded, controls }) {
       type="button" onClick={onClick} aria-current={active ? 'page' : undefined}
       aria-expanded={expanded} aria-controls={controls}
       aria-label={compact ? label : undefined} title={compact ? label : undefined}
-      className={`flex flex-none items-center rounded-[var(--radius-sm)] ${compact ? 'size-11 justify-center' : 'w-full gap-[var(--space-8)] px-[var(--space-12)] py-[var(--space-10)] text-left'} ${active ? on : rest}`}
+      className={`flex flex-none items-center rounded-[var(--radius-sm)] ${compact ? 'size-[var(--space-44)] justify-center' : 'w-full gap-[var(--space-8)] px-[var(--space-12)] py-[var(--space-8)] text-left'} ${active ? on : rest}`}
     >
       <Mask src={item.icon} />
       {!compact && <span className="t-label-md flex-1">{label}</span>}
@@ -93,7 +93,7 @@ function MenuItem({ item, active, onClick, compact, expanded, controls }) {
 function SubItem({ item, active, onClick }) {
   return (
     <button type="button" onClick={onClick} aria-current={active ? 'page' : undefined}
-      className={`t-label-sm flex w-full flex-none items-center rounded-[var(--radius-sm)] bg-transparent px-9 py-[var(--space-10)] text-left hover:bg-[var(--bg-surface-subdued)] ${active ? 'text-[color:var(--text-action-outline)]' : 'text-[color:var(--text-secondary)]'}`}>
+      className={`t-label-sm flex w-full flex-none items-center rounded-[var(--radius-sm)] bg-transparent pl-[var(--space-36)] pr-[var(--space-12)] py-[var(--space-8)] text-left hover:bg-[var(--bg-surface-subdued)] ${active ? 'text-[color:var(--text-action-outline)]' : 'text-[color:var(--text-secondary)]'}`}>
       {t(item.label)}
     </button>
   );
@@ -103,7 +103,7 @@ function ToggleButton({ isCollapsed }) {
   const label = isCollapsed ? t('Expandir menu') : t('Recolher menu');
   return (
     <button type="button" onClick={() => update({ collapsed: !isCollapsed })} aria-label={label} title={label} aria-expanded={!isCollapsed}
-      className={`absolute right-[-16px] z-10 flex size-6 items-center justify-center rounded-full border border-[color:var(--border-default)] bg-[var(--bg-surface)] text-[color:var(--icon-default)] hover:bg-[var(--bg-surface-subdued)] ${isCollapsed ? 'top-4' : 'top-6'}`}>
+      className={`absolute right-[calc(var(--space-16)*-1)] z-10 flex size-[var(--space-24)] items-center justify-center rounded-full border border-[color:var(--border-default)] bg-[var(--bg-surface)] text-[color:var(--icon-default)] hover:bg-[var(--bg-surface-subdued)] ${isCollapsed ? 'top-[var(--space-16)]' : 'top-[var(--space-24)]'}`}>
       <Icon name={isCollapsed ? 'chevron-right' : 'chevron-left'} size={14} />
     </button>
   );
@@ -116,9 +116,9 @@ export function Sidebar({ active, go }) {
 
   if (isCollapsed) {
     return (
-      <aside aria-label={t('Menu principal')} className={`${base} w-16 items-center gap-[var(--space-4)] pb-[var(--space-16)] pt-[var(--space-12)]`}>
+      <aside aria-label={t('Menu principal')} className={`${base} w-[var(--space-64)] items-center gap-[var(--space-4)] pb-[var(--space-16)] pt-[var(--space-12)]`}>
         <ToggleButton isCollapsed />
-        <div className="flex size-8 flex-none items-center justify-center overflow-hidden rounded-[var(--radius-sm)] bg-[var(--bg-action-outline-pressed)]">
+        <div className="flex size-[var(--space-32)] flex-none items-center justify-center overflow-hidden rounded-[var(--radius-sm)] bg-[var(--bg-action-outline-pressed)]">
           <img src={collapsedBuilding} alt="" width={24} height={24} />
         </div>
         <Divider wrap="px-[var(--space-8)] py-[var(--space-4)]" line="w-full" />
@@ -130,7 +130,7 @@ export function Sidebar({ active, go }) {
           ))}
         </nav>
         <Divider wrap="px-[var(--space-8)] pb-[var(--space-4)] pt-[var(--space-8)]" line="w-full" />
-        <div className="flex size-8 flex-none items-center justify-center rounded-full bg-[var(--bg-surface-subdued)]"><img src={collapsedUser} alt={t('Perfil')} width={16} height={16} /></div>
+        <div className="flex size-[var(--space-32)] flex-none items-center justify-center rounded-full bg-[var(--bg-surface-subdued)]"><img src={collapsedUser} alt={t('Perfil')} width={16} height={16} /></div>
       </aside>
     );
   }
@@ -139,7 +139,7 @@ export function Sidebar({ active, go }) {
     <aside aria-label={t('Menu principal')} className={`${base} w-60 pb-[var(--space-16)] pt-[var(--space-8)]`}>
       <ToggleButton isCollapsed={false} />
       <button type="button" title={t('Trocar franquia')} className="flex w-full flex-none items-center gap-[var(--space-8)] rounded-[var(--radius-sm)] bg-transparent py-[var(--space-12)] pl-[var(--space-12)] pr-[var(--space-24)] text-left hover:bg-[var(--bg-surface-subdued)]">
-        <span className="flex size-8 flex-none items-center justify-center rounded-[var(--radius-sm)] bg-[var(--bg-action-outline-pressed)]"><img src={headerBuilding} alt="" width={16} height={16} /></span>
+        <span className="flex size-[var(--space-32)] flex-none items-center justify-center rounded-[var(--radius-sm)] bg-[var(--bg-action-outline-pressed)]"><img src={headerBuilding} alt="" width={16} height={16} /></span>
         <span className="flex min-w-0 flex-1 flex-col whitespace-nowrap">
           <span className="t-label-md text-[color:var(--text-primary)]">Popstand Franchise</span>
           <span className="text-[10px] font-normal leading-[14px] tracking-[0.02em] text-[color:var(--text-secondary)]">{t('Administrador corporativo')}</span>
@@ -167,7 +167,7 @@ export function Sidebar({ active, go }) {
       <div className="flex flex-none flex-col items-center py-[var(--space-12)]"><img src={logo} alt="SkyeVantage" width={136} height={47} /></div>
       <Divider wrap="px-[var(--space-12)] pb-[var(--space-12)]" line="w-full" />
       <div className="flex flex-none items-center gap-[var(--space-8)] px-[var(--space-12)]">
-        <span className="t-label-sm flex size-8 flex-none items-center justify-center rounded-full bg-[var(--bg-action-primary)] text-[color:var(--text-on-action)]">JP</span>
+        <span className="t-label-sm flex size-[var(--space-32)] flex-none items-center justify-center rounded-full bg-[var(--bg-action-primary)] text-[color:var(--text-on-action)]">JP</span>
         <span className="flex min-w-0 flex-col">
           <span className="t-label-md text-[color:var(--text-primary)]">João Pereira</span>
           <span className="truncate text-[10px] font-normal leading-[14px] tracking-[0.02em] text-[color:var(--text-secondary)]">joao.pereira@popstand.com</span>

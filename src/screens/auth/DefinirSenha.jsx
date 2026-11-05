@@ -51,7 +51,7 @@ export function DefinirSenha({ go }) {
               <PasswordField ref={passwordRef} label={t('Nova senha')} placeholder={t('Senha')} autoComplete="new-password" value={password} onChange={(e) => onPassword(e.target.value)} error={errors.password ? t(errors.password) : undefined} disabled={loading} />
               <PasswordField ref={confirmRef} label={t('Confirmar senha')} placeholder={t('Senha')} autoComplete="new-password" value={confirm} onChange={(e) => onConfirm(e.target.value)} error={errors.confirm ? t(errors.confirm) : undefined} disabled={loading} />
             </div>
-            <Requirements rules={PASSWORD_RULES} value={password} touched={touched} />
+            <Requirements rules={PASSWORD_RULES} value={password} touched={touched} spaced={!!errors.confirm} />
           </div>
           <Button type="submit" className="w-full" loading={loading}>{t('Definir senha')}</Button>
         </form>

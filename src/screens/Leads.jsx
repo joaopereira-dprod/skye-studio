@@ -6,7 +6,7 @@ export function Leads({ go }) {
   return (
     <Shell active="leads" go={go} title="Leads e clientes" action="Novo lead">
       <div className="mb-[var(--space-16)] flex items-end gap-[var(--space-8)]">
-        <Input className="w-80" iconLeft="search" placeholder={t('Buscar por nome ou telefone')} aria-label={t('Buscar por nome ou telefone')} />
+        <div className="w-80"><Input iconLeft="search" placeholder={t('Buscar por nome ou telefone')} aria-label={t('Buscar por nome ou telefone')} /></div>
         <Button variant="ghost" iconRight="chevron-down">{t('Todos os status')}</Button>
       </div>
       <Table

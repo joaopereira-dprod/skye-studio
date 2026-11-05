@@ -2,9 +2,9 @@
 //   Tokens → cores primitivas, cores semânticas, espaçamento, raio de borda, sombras
 //   Estilos de texto → display, title, body, label, caption
 //   Componentes → uma seção por categoria, um item por componente
-import { primitives, semantic, space, radius, textStyles, shadows } from 'skyevantage-design-system';
+import { primitives, semantic, radius, textStyles, shadows } from 'skyevantage-design-system';
 import { t, lang, useLang } from '../i18n.js';
-import { DSScope } from '../ds.jsx';
+import { DSScope, SPACE } from '../ds.jsx';
 import { DOCS, CATEGORIES } from './ds-docs.jsx';
 import { SCREENS } from '../screens/index.jsx';
 
@@ -63,8 +63,8 @@ function Tokens({ pick }) {
   if (pick === 'espaco') {
     return (
       <article className="component">
-        <Header kicker="TOKENS" title={t('Espaçamento')}>{t('Escala de espaçamento em pixels. Use sempre um destes valores para margens, vãos e preenchimentos.')}</Header>
-        <div className="card pad" style={{ display: 'grid', gap: 10 }}>{Object.entries(space).map(([k, v]) => <div className="sp" key={k}><span className="mono">--space-{k}</span><i style={{ width: v }} /><span className="mono muted">{v}px</span></div>)}</div>
+        <Header kicker="TOKENS" title={t('Espaçamento')}>{t('Escala de espaçamento em pixels: todo múltiplo de 4, de 4 a 96. Use sempre um destes valores para margens, vãos e preenchimentos.')}</Header>
+        <div className="card pad" style={{ display: 'grid', gap: 'var(--space-12)' }}>{SPACE.map((v) => <div className="sp" key={v}><span className="mono">--space-{v}</span><i style={{ width: v }} /><span className="mono muted">{v}px</span></div>)}</div>
       </article>
     );
   }
@@ -72,7 +72,7 @@ function Tokens({ pick }) {
     return (
       <article className="component">
         <Header kicker="TOKENS" title={t('Raio de borda')}>{t('Cantos arredondados. O botão usa o raio de pílula; campos e cartões usam o médio.')}</Header>
-        <div className="card pad" style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+        <div className="card pad" style={{ display: 'flex', gap: 'var(--space-24)', flexWrap: 'wrap' }}>
           {Object.entries(radius).map(([k, v]) => <div className="tile" key={k}><div className="tile__box" style={{ border: '2px solid var(--c-surface-inverse)', background: 'var(--c-neutral-100)', borderRadius: Math.min(v, 28) }} /><span className="mono">--radius-{k}</span><span className="mono muted">{v >= 999 ? t('pílula') : `${v}px`}</span></div>)}
         </div>
       </article>
@@ -81,7 +81,7 @@ function Tokens({ pick }) {
   return (
     <article className="component">
       <Header kicker="TOKENS" title={t('Sombras')}>{t('Elevação. Quanto maior o número, mais o elemento flutua sobre a tela.')}</Header>
-      <div className="card pad" style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+      <div className="card pad" style={{ display: 'flex', gap: 'var(--space-24)', flexWrap: 'wrap' }}>
         {Object.entries(shadows).map(([k, v]) => <div className="tile" key={k}><div className="tile__box" style={{ background: 'var(--c-surface-default)', borderRadius: 12, boxShadow: v }} /><span className="mono">--shadow-{k}</span></div>)}
       </div>
     </article>
@@ -128,7 +128,7 @@ function Component({ pick }) {
         <h2 id="comp-title" className="st-headline-bold-40">{d.name}</h2>
         <p className="st-body-md">{tx(d.desc)}</p>
       </header>
-      <div className="example"><div className="preview">{d.demo()}</div><pre className="code">{d.code}</pre></div>
+      <div className="example"><div className={`preview${d.top ? ' preview--top' : ''}`}>{d.demo()}</div><pre className="code">{d.code}</pre></div>
       <section>
         <h4>Props</h4>
         <div className="tablewrap"><table className="props"><thead><tr><th>{t('Nome')}</th><th>{t('Tipo')}</th><th>{t('Padrão')}</th><th>{t('Descrição')}</th></tr></thead>

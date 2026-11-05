@@ -81,7 +81,7 @@ export const DOCS = [
     demo: () => (<><IconButton icon="pencil" label="Edit" /><IconButton icon="ellipsis-vertical" label="More" variant="ghost" /><IconButton icon="trash" label="Delete" variant="critical" /></>),
   },
   {
-    name: 'Input', cat: 'form', css: ['sv-box', 'sv-field'], used: ['leads'],
+    name: 'Input', cat: 'form', css: ['sv-box', 'sv-field'], used: ['leads'], top: true, // top: campos de alturas diferentes alinham pelo topo
     desc: L('Campo de texto com rótulo, texto de ajuda, ícones, complementos (addons) e estado de erro.', 'Text field with label, helper text, icons, addons and an error state.'),
     code: '<Input label="Total Roof Area" addonRight="ft²" helper="Round up" />',
     props: [P('label / helper', 'string', '–', 'Rótulo acima e ajuda abaixo do campo.', 'Label above and helper below the field.'),
@@ -278,8 +278,8 @@ export const DOCS = [
     props: [P('name', 'icon name', '–', 'Um dos ícones do conjunto.', 'One of the icons in the set.'), P('size', 'number', '16', 'Tamanho em pixels.', 'Size in pixels.')],
     do: L('Use o mesmo ícone para a mesma ideia, em todas as telas.', 'Use the same icon for the same idea, on every screen.'),
     dont: L('Misturar ícones preenchidos com os de contorno.', 'Mixing filled icons with outline ones.'),
-    demo: () => (<div className="grid w-full gap-3" style={{ gridTemplateColumns: 'repeat(auto-fill,minmax(96px,1fr))' }}>
-      {ICONS.map((n) => (<div key={n} className="sv flex flex-col items-center gap-2 p-2"><Icon name={n} size={24} /><span className="t-caption-lg">{n}</span></div>))}
+    demo: () => (<div className="grid w-full gap-[var(--space-12)]" style={{ gridTemplateColumns: 'repeat(auto-fill,minmax(96px,1fr))' }}>
+      {ICONS.map((n) => (<div key={n} className="sv flex flex-col items-center gap-[var(--space-8)] p-[var(--space-8)]"><Icon name={n} size={24} /><span className="t-caption-lg">{n}</span></div>))}
     </div>),
   },
 ].map((d) => ({ ...d, tokens: tokensOf(...d.css) }));

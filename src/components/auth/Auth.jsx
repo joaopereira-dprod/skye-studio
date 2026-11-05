@@ -26,7 +26,7 @@ export function AuthHeader({ title, subtitle, gap = 'var(--space-20)', width }) 
   return (
     <div className="flex w-full flex-col items-center overflow-hidden text-center" style={{ gap, maxWidth: width }}>
       <img src={logo} alt="SkyeVantage Cloud Platform" width={214} height={88} className="h-[88px] w-[214px] flex-none object-cover" />
-      <div className="flex w-full flex-col items-center gap-[var(--space-6)]">
+      <div className="flex w-full flex-col items-center gap-[var(--space-4)]">
         {title && <h1 className="t-title-md w-full text-[color:var(--text-primary)]">{title}</h1>}
         {subtitle && <p className="t-body-md w-full text-[color:var(--text-secondary)]">{subtitle}</p>}
       </div>
@@ -37,7 +37,7 @@ export function AuthHeader({ title, subtitle, gap = 'var(--space-20)', width }) 
 /** AuthCard: cartão de 460px com cabeçalho e o conteúdo no slot. */
 export function AuthCard({ title, subtitle, children, label }) {
   return (
-    <section aria-label={label || title} className="flex w-[460px] max-w-full flex-none flex-col items-start gap-[var(--space-40)] overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--border-default)] bg-[var(--bg-surface)] p-[var(--space-32)] shadow-[var(--shadow-400)]">
+    <section aria-label={label || title} className="flex w-[460px] max-w-full flex-none flex-col items-start gap-[var(--space-40)] overflow-hidden rounded-[var(--radius-lg)] bg-[var(--bg-surface)] p-[var(--space-32)] shadow-[inset_0_0_0_1px_var(--border-default),var(--shadow-400)]">
       <AuthHeader title={title} subtitle={subtitle} />
       <div className="flex w-full flex-col items-start">{children}</div>
     </section>
@@ -47,8 +47,8 @@ export function AuthCard({ title, subtitle, children, label }) {
 /** AuthSuccessCard: confirmação de sucesso, com ícone, texto e um botão. */
 export function AuthSuccessCard({ title, text, cta, onCta }) {
   return (
-    <section aria-labelledby="auth-success-title" className="flex w-[460px] max-w-full flex-none flex-col items-center justify-center gap-[var(--space-40)] overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--border-default)] bg-[var(--bg-surface)] p-[var(--space-32)] shadow-[var(--shadow-400)]">
-      <div className="flex size-14 flex-none items-center justify-center rounded-full bg-[var(--bg-success-strong)] text-[color:var(--text-success-strong)]"><Icon name="check" size={28} /></div>
+    <section aria-labelledby="auth-success-title" className="flex w-[460px] max-w-full flex-none flex-col items-center justify-center gap-[var(--space-40)] overflow-hidden rounded-[var(--radius-lg)] bg-[var(--bg-surface)] p-[var(--space-32)] shadow-[inset_0_0_0_1px_var(--border-default),var(--shadow-400)]">
+      <div className="flex size-[var(--space-56)] flex-none items-center justify-center rounded-full bg-[var(--bg-success-strong)] text-[color:var(--text-success-strong)]"><Icon name="check" size={28} /></div>
       <div role="status" className="flex w-full flex-col items-center gap-[var(--space-4)] text-center">
         <h1 id="auth-success-title" className="t-title-sm w-full text-[color:var(--text-primary)]">{title}</h1>
         <p className="t-body-md w-full text-[color:var(--text-secondary)]">{text}</p>
@@ -73,7 +73,7 @@ export const PasswordField = forwardRef(function PasswordField({ label, error, .
     <div className="auth-pw relative w-full">
       <Input ref={ref} label={label} error={error} type={shown ? 'text' : 'password'} autoComplete="current-password" {...rest} />
       <button type="button" onClick={() => setShown((s) => !s)} aria-label={toggle} title={toggle} aria-pressed={shown}
-        className="absolute right-[var(--space-8)] top-[calc(24px+var(--space-4))] flex size-8 items-center justify-center rounded-[var(--radius-sm)] bg-transparent text-[color:var(--icon-default)] hover:bg-[var(--bg-surface-subdued)] focus-visible:shadow-[var(--shadow-focusRing)] focus-visible:outline-none">
+        className="absolute right-[var(--space-8)] top-[calc(18px+var(--space-4)+var(--space-4))] flex size-[var(--space-32)] items-center justify-center rounded-[var(--radius-sm)] bg-transparent text-[color:var(--icon-default)] hover:bg-[var(--bg-surface-subdued)] focus-visible:shadow-[var(--shadow-focusRing)] focus-visible:outline-none">
         {shown
           ? <Icon size={18}>{EyeOff}</Icon>
           : <span aria-hidden="true" style={{ display: 'block', width: 18, height: 18, background: 'currentColor', WebkitMaskImage: cssUrl(eye), maskImage: cssUrl(eye), WebkitMaskSize: 'contain', maskSize: 'contain', WebkitMaskRepeat: 'no-repeat', maskRepeat: 'no-repeat', WebkitMaskPosition: 'center', maskPosition: 'center' }} />}
@@ -82,10 +82,11 @@ export const PasswordField = forwardRef(function PasswordField({ label, error, .
   );
 });
 
-/** Lista de requisitos da senha. Antes de digitar fica neutra; depois, verde (cumprido) ou vermelha (falta). */
-export function Requirements({ rules, value, touched }) {
+/** Lista de requisitos da senha. Antes de digitar fica neutra; depois, verde (cumprido) ou vermelha (falta).
+ *  `spaced`: com uma mensagem de erro logo acima, a lista ganha mais 8px de respiro para não parecer parte da mensagem (proximidade). */
+export function Requirements({ rules, value, touched, spaced }) {
   return (
-    <ul aria-label={t('Requisitos da senha')} className="flex w-full list-none flex-col gap-[var(--space-4)] p-0">
+    <ul aria-label={t('Requisitos da senha')} className={`flex w-full list-none flex-col gap-[var(--space-4)] p-0 ${spaced ? 'mt-[var(--space-8)]' : ''}`}>
       {rules.map((r) => {
         const ok = r.test(value);
         const state = !touched ? 'idle' : ok ? 'ok' : 'bad';

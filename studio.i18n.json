@@ -235,6 +235,7 @@
     "Dados de uma conta válida para entrar": "Details of a valid account to log in",
     "Resultado": "Result",
     "Feedbacks usados": "Feedback used",
-    "Erro de campo: Input com error. Falha geral: Banner de erro. Bloqueio por tentativas: Banner de aviso. Carregando: Button com loading. Sucesso: cartão de confirmação (AuthSuccessCard) e aviso ao entrar no app.": "Field error: Input with error. General failure: error Banner. Lockout after attempts: warning Banner. Loading: Button with loading. Success: confirmation card (AuthSuccessCard) and a notice when entering the app."
+    "Erro de campo: Input com error. Falha geral: Banner de erro. Bloqueio por tentativas: Banner de aviso. Carregando: Button com loading. Sucesso: cartão de confirmação (AuthSuccessCard) e aviso ao entrar no app.": "Field error: Input with error. General failure: error Banner. Lockout after attempts: warning Banner. Loading: Button with loading. Success: confirmation card (AuthSuccessCard) and a notice when entering the app.",
+    "Escala de espaçamento em pixels: todo múltiplo de 4, de 4 a 96. Use sempre um destes valores para margens, vãos e preenchimentos.": "Spacing scale in pixels: every multiple of 4, from 4 to 96. Always use one of these values for margins, gaps and padding."
   }
 }
