@@ -1,4 +1,4 @@
-import { Shell, Table, Tag, Stat } from '../components/Shell.jsx';
+import { Shell, Table, Status, Stat } from '../components/Shell.jsx';
 export function Projetos({ go }) {
   return (
     <Shell active="projetos" go={go} title="Projetos" action="Novo projeto">
@@ -11,10 +11,10 @@ export function Projetos({ go }) {
       <Table
         cols={['Projeto', 'Cliente', 'Sistema', 'Etapa', 'Prazo']}
         rows={[
-          ['Telhado residencial – Rua das Acácias', 'Marina Costa', 'Skye Campinas', <Tag>Em execução</Tag>, '18/11'],
-          ['Troca de telhas – Galpão Norte', 'Logística Prado', 'Skye São Paulo', <Tag>Aguardando material</Tag>, '25/11'],
-          ['Reforma de cobertura – Condomínio Vista', 'Condomínio Vista', 'Skye Curitiba', <Tag>Vistoria</Tag>, '02/12'],
-          ['Impermeabilização – Padaria Central', 'Paulo Menezes', 'Skye Campinas', <Tag>Concluído</Tag>, '30/10'],
+          ['Telhado residencial – Rua das Acácias', 'Marina Costa', 'Skye Campinas', <Status>Em execução</Status>, '18/11'],
+          ['Troca de telhas – Galpão Norte', 'Logística Prado', 'Skye São Paulo', <Status>Aguardando material</Status>, '25/11'],
+          ['Reforma de cobertura – Condomínio Vista', 'Condomínio Vista', 'Skye Curitiba', <Status>Vistoria</Status>, '02/12'],
+          ['Impermeabilização – Padaria Central', 'Paulo Menezes', 'Skye Campinas', <Status>Concluído</Status>, '30/10'],
         ]}
       />
     </Shell>

@@ -1,3 +1,4 @@
+import { DSStyles, Button, Table as DSTable, MetricCard, Tag as DSTag, Badge } from 'skyevantage-design-system';
 import { t, useLang } from '../i18n.js';
 
 const NAV = [
@@ -8,19 +9,42 @@ const NAV = [
   { id: 'usuarios', label: 'Usuários' },
 ];
 
+// Cor da Tag do design system para cada status (a chave é o texto em português).
+const STATUS_COLOR = {
+  'Concluído': 'success', 'Aprovado': 'success', 'Ativa': 'success', 'Ativo': 'success', 'Cliente': 'success',
+  'Aguardando material': 'warning', 'Em análise': 'warning', 'Visita agendada': 'warning', 'Em implantação': 'warning', 'Convite pendente': 'warning',
+  'Em execução': 'info', 'Vistoria': 'info', 'Novo lead': 'info', 'Orçamento enviado': 'info', 'Enviado': 'info',
+  'Recusado': 'error',
+};
+
+export function Status({ children }) {
+  useLang();
+  return <DSTag color={STATUS_COLOR[children] || 'info'}>{t(children)}</DSTag>;
+}
+
+export function Role({ children }) {
+  useLang();
+  return <Badge color="neutral">{t(children)}</Badge>;
+}
+
 export function Shell({ active, go, title, action, children }) {
   useLang();
   return (
-    <div className="flex h-full bg-neutral-50 text-neutral-900">
-      <aside className="flex w-60 flex-col border-r border-neutral-200 bg-white p-4">
-        <div className="mb-6 px-2 text-lg font-semibold">Skye Advantage</div>
-        <nav className="flex flex-col gap-1">
+    <div className="flex h-full bg-[var(--bg-surface-secondary)] text-[var(--text-primary)]">
+      <DSStyles />
+      <aside className="flex w-60 flex-col border-r border-[var(--border-subdued)] bg-[var(--bg-surface)] p-[var(--space-16)]">
+        <div className="t-title-xs mb-[var(--space-24)] px-[var(--space-8)] text-[var(--text-brand)]">Skye Advantage</div>
+        <nav className="flex flex-col gap-[var(--space-4)]">
           {NAV.map((n) => (
             <button
               key={n.id}
+              type="button"
               onClick={() => go(n.id)}
-              className={`h-10 rounded px-3 text-left text-sm ${
-                active === n.id ? 'bg-neutral-900 font-medium text-white' : 'text-neutral-700 hover:bg-neutral-100'
+              aria-current={active === n.id ? 'page' : undefined}
+              className={`t-label-lg h-10 rounded-[var(--radius-md)] px-[var(--space-12)] text-left ${
+                active === n.id
+                  ? 'bg-[var(--bg-action-primary)] text-[var(--text-on-action)]'
+                  : 'bg-transparent text-[var(--text-secondary)] hover:bg-[var(--bg-surface-subdued)]'
               }`}
             >
               {t(n.label)}
@@ -28,10 +52,10 @@ export function Shell({ active, go, title, action, children }) {
           ))}
         </nav>
       </aside>
-      <main className="flex-1 overflow-auto p-8">
-        <div className="mb-6 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">{t(title)}</h1>
-          {action && <button className="h-10 rounded bg-neutral-900 px-4 text-sm font-medium text-white">{t(action)}</button>}
+      <main className="flex-1 overflow-auto p-[var(--space-32)]">
+        <div className="mb-[var(--space-24)] flex items-center justify-between">
+          <h1 className="t-title-lg">{t(title)}</h1>
+          {action && <Button iconLeft="plus">{t(action)}</Button>}
         </div>
         {children}
       </main>
@@ -39,37 +63,18 @@ export function Shell({ active, go, title, action, children }) {
   );
 }
 
+/** Tabela do design system. cols: títulos em português; rows: matrizes de texto ou elementos. */
 export function Table({ cols, rows }) {
   useLang();
-  return (
-    <div className="overflow-hidden rounded border border-neutral-200 bg-white">
-      <table className="w-full text-left text-sm">
-        <thead className="bg-neutral-100 text-neutral-700">
-          <tr>{cols.map((c) => <th key={c} className="px-4 py-3 font-medium">{t(c)}</th>)}</tr>
-        </thead>
-        <tbody>
-          {rows.map((r, i) => (
-            <tr key={i} className="border-t border-neutral-200">
-              {r.map((v, j) => <td key={j} className="px-4 py-3">{typeof v === 'string' ? t(v) : v}</td>)}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
-export function Tag({ children }) {
-  useLang();
-  return <span className="rounded-full border border-neutral-300 bg-neutral-100 px-2 py-0.5 text-xs text-neutral-800">{typeof children === 'string' ? t(children) : children}</span>;
+  const columns = cols.map((c, i) => ({
+    key: String(i),
+    header: t(c),
+    render: (r) => (typeof r[i] === 'string' ? t(r[i]) : r[i]),
+  }));
+  return <DSTable columns={columns} rows={rows.map((r, i) => Object.assign([...r], { id: i }))} />;
 }
 
 export function Stat({ label, value }) {
   useLang();
-  return (
-    <div className="rounded border border-neutral-200 bg-white p-4">
-      <div className="text-sm text-neutral-600">{t(label)}</div>
-      <div className="mt-1 text-2xl font-semibold">{t(value)}</div>
-    </div>
-  );
+  return <MetricCard label={t(label)} value={t(value)} />;
 }
