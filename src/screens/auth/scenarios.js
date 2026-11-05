@@ -8,4 +8,5 @@ export const SCENARIOS = {
   maxAttempts: 3,
   reusedPassword: DEMO.password, // a senha que a conta já usa
   invitedBy: 'Carlos Ribeiro',
+  resetSupport: 'Swan', // a quem pedir um novo link de redefinição
 };

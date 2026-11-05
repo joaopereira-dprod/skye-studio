@@ -7,7 +7,21 @@ import { SCENARIOS } from './scenarios.js';
 const MISMATCH = 'As senhas não coincidem';
 const REUSED = 'Você não pode reutilizar uma senha anterior.';
 
-export function DefinirSenha({ go, ctx }) {
+// invite: primeiro acesso por convite. reset: quem já tem conta e esqueceu a senha (mesma tela, outro texto e outro destino).
+const DEFAULT_EMAIL = 'joao.pereira+1@popstand.com';
+const MODES = {
+  invite: {
+    title: 'Vamos configurar seu acesso', next: 'senha-definida',
+    subtitle: (ctx) => t('Boas-vindas, {email}! Você foi convidado para a SkyeVantage como Administrador da unidade.').replace('{email}', ctx?.inviteEmail || DEFAULT_EMAIL),
+  },
+  reset: {
+    title: 'Redefina sua senha', next: 'senha-redefinida',
+    subtitle: (ctx) => t('Informe uma nova senha para {email}').replace('{email}', ctx?.resetEmail || DEFAULT_EMAIL),
+  },
+};
+
+export function DefinirSenha({ go, ctx, mode = 'invite' }) {
+  const cfg = MODES[mode];
   useLang();
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
@@ -39,12 +53,12 @@ export function DefinirSenha({ go, ctx }) {
       setErrors({ password: REUSED, confirm: '' });
       return focusSoon(passwordRef);
     }
-    go('senha-definida');
+    go(cfg.next);
   };
 
   return (
     <AuthPage>
-      <AuthCard title={t('Vamos configurar seu acesso')} subtitle={t('Boas-vindas, {email}! Você foi convidado para a SkyeVantage como Administrador da unidade.').replace('{email}', ctx?.inviteEmail || 'joao.pereira+1@popstand.com')}>
+      <AuthCard title={t(cfg.title)} subtitle={cfg.subtitle(ctx)}>
         <form noValidate onSubmit={submit} aria-busy={loading} className="flex w-full flex-col gap-[var(--space-24)]">
           <div className="flex w-full flex-col gap-[var(--space-8)]">
             <div className="flex w-full flex-col gap-[var(--space-12)]">

@@ -169,7 +169,7 @@
     "Login feito com sucesso.": "You are now logged in.",
     "Senha": "Password",
     "Informe seu e-mail.": "Enter your email.",
-    "Informe um e-mail válido.": "Enter a valid email address.",
+    "Informe um e-mail válido.": "Please enter a valid email",
     "Informe sua senha.": "Enter your password.",
     "Esqueceu sua senha?": "Forgot your password?",
     "Entrar": "Login",
@@ -242,6 +242,18 @@
     "Este link expirou": "This link has expired",
     "Este link não é mais válido. Peça um novo a {name}.": "This link is no longer valid. Please reach out to {name} for a new one.",
     "Link do convite expirado": "Invite link expired",
-    "Erro de campo: Input com error (ou só a borda, quando a mensagem está no campo vizinho). Falha geral: Banner de erro. Bloqueio por tentativas: Banner de aviso. Carregando: Button com loading. Sucesso: cartão de confirmação (AuthSuccessCard) e aviso ao entrar no app.": "Field error: Input with error (or just the border, when the message sits on the neighboring field). General failure: error Banner. Lockout after attempts: warning Banner. Loading: Button with loading. Success: confirmation card (AuthSuccessCard) and a notice when entering the app."
+    "Erro de campo: Input com error (ou só a borda, quando a mensagem está no campo vizinho). Falha geral: Banner de erro. Bloqueio por tentativas: Banner de aviso. Carregando: Button com loading. Sucesso: cartão de confirmação (AuthSuccessCard) e aviso ao entrar no app.": "Field error: Input with error (or just the border, when the message sits on the neighboring field). General failure: error Banner. Lockout after attempts: warning Banner. Loading: Button with loading. Success: confirmation card (AuthSuccessCard) and a notice when entering the app.",
+    "Recupere sua senha - SkyeVantage": "Recover your password - SkyeVantage",
+    "João, recupere sua senha.": "João, recover your password.",
+    "Parece que você perdeu sua senha? Estamos aqui para ajudar: clique abaixo para criar uma nova senha.": "Looks like you lost your password? We’re here to help, click below to set a new password",
+    "Criar nova senha": "Set new password",
+    "Redefina sua senha": "Reset your password",
+    "Informe uma nova senha para {email}": "Enter a new password for {email}",
+    "Sua senha foi redefinida. Entre para começar a usar sua conta.": "Your password has been reset. Log in to start using your account.",
+    "O link de redefinição de senha expirou": "This password reset link has expired",
+    "Este link de redefinição não é mais válido. Peça um novo link a {name}.": "This reset link is no longer valid. Please reach out to {name} for a new link.",
+    "E-mail de recuperação": "[Email] Forgot your password",
+    "Senha redefinida": "Password reset success",
+    "Link de redefinição expirado": "Reset link expired"
   }
 }

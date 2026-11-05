@@ -8,11 +8,16 @@ import { EsqueciSenha } from './auth/EsqueciSenha.jsx';
 import { DefinirSenha } from './auth/DefinirSenha.jsx';
 import { SenhaDefinida, LinkEnviado, LinkConviteExpirado } from './auth/Confirmacoes.jsx';
 import { EmailConvite } from './auth/EmailConvite.jsx';
+import { EmailRecuperarSenha, RedefinirSenha, SenhaRedefinida, LinkRedefinicaoExpirado } from './auth/Recuperacao.jsx';
 export const SCREENS = [
   // Autenticação (Figma: Authentication). O protótipo abre no login.
   { id: 'login', label: 'Login', group: 'Autenticação', Component: Login, figma: '325-6580' },
   { id: 'esqueci-senha', label: 'Esqueci a senha', group: 'Autenticação', Component: EsqueciSenha, figma: '326-7751' },
   { id: 'link-enviado', label: 'Link enviado', group: 'Autenticação', Component: LinkEnviado, figma: '326-7862' },
+  { id: 'email-recuperar-senha', label: 'E-mail de recuperação', group: 'Autenticação', Component: EmailRecuperarSenha, figma: '8462-52205' },
+  { id: 'redefinir-senha', label: 'Redefinir senha', group: 'Autenticação', Component: RedefinirSenha, figma: '8617-63962' },
+  { id: 'senha-redefinida', label: 'Senha redefinida', group: 'Autenticação', Component: SenhaRedefinida, figma: '8712-98998' },
+  { id: 'link-redefinicao-expirado', label: 'Link de redefinição expirado', group: 'Autenticação', Component: LinkRedefinicaoExpirado, figma: '8617-64330' },
   { id: 'email-convite', label: 'E-mail de convite', group: 'Autenticação', Component: EmailConvite, figma: '319-9137' },
   { id: 'definir-senha', label: 'Definir senha', group: 'Autenticação', Component: DefinirSenha, figma: '326-2' },
   { id: 'senha-definida', label: 'Senha definida', group: 'Autenticação', Component: SenhaDefinida, figma: '326-7846' },
