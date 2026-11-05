@@ -10,4 +10,6 @@ export const SCREENS = [
   { id: 'sistemas', label: 'Sistemas', group: 'Administração', Component: Sistemas, figma: null },
   { id: 'usuarios', label: 'Usuários', group: 'Administração', Component: Usuarios, figma: null },
 ];
-export const STUBS = [];
+import { NAV_STUBS } from '../components/Sidebar.jsx';
+// Destinos do menu lateral que ainda não têm tela: o Studio mostra o aviso “Tela não desenhada”.
+export const STUBS = NAV_STUBS;
