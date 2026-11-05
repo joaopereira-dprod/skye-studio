@@ -127,6 +127,22 @@
     "Número de destaque, com rótulo.": "Key figure, with a label.",
     "Tabela com colunas configuráveis.": "Table with configurable columns.",
     "Pares de rótulo e valor, com botão de editar opcional.": "Label and value pairs, with an optional edit button.",
-    "Navegação entre páginas, com linhas por página.": "Page navigation, with rows per page."
+    "Navegação entre páginas, com linhas por página.": "Page navigation, with rows per page.",
+    "Abrir no Figma ↗": "Open in Figma ↗",
+    "COMPONENTES": "COMPONENTS",
+    "estável": "stable",
+    "Tipo": "Type",
+    "Descrição": "Description",
+    "Faça": "Do",
+    "Evite": "Don't",
+    "Tokens": "Tokens",
+    "Usado em": "Used in",
+    "nenhuma tela ainda": "no screen yet",
+    "A paleta base. Clique numa cor para copiar o valor. Os componentes não usam estas cores direto: usam as semânticas, que apontam para elas.": "The base palette. Click a color to copy its value. Components do not use these colors directly: they use the semantic ones, which point to them.",
+    "Papéis de cor lidos pelos componentes. Cada um aponta para uma cor primitiva, então trocar a paleta não exige mexer nos componentes.": "Color roles read by the components. Each one points to a primitive color, so changing the palette does not require touching the components.",
+    "Escala de espaçamento em pixels. Use sempre um destes valores para margens, vãos e preenchimentos.": "Spacing scale in pixels. Always use one of these values for margins, gaps and padding.",
+    "Cantos arredondados. O botão usa o raio de pílula; campos e cartões usam o médio.": "Rounded corners. The button uses the pill radius; fields and cards use the medium one.",
+    "Elevação. Quanto maior o número, mais o elemento flutua sobre a tela.": "Elevation. The higher the number, the more the element floats above the screen.",
+    "Família Inter. Cada estilo vira uma classe, por exemplo .t-title-lg.": "Inter family. Each style becomes a class, for example .t-title-lg."
   }
 }

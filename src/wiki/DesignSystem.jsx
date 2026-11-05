@@ -1,16 +1,12 @@
 import { useState } from 'react';
-import {
-  primitives, semantic, space, radius, textStyles, shadows, Icon,
-  Button, IconButton, Input, Select, Textarea, Checkbox, Radio, RadioCard, Tag, Badge, FilterTag,
-  Banner, Toast, BoxedTabs, SegmentedControl, DropdownMenu, MetricCard, Table, IconLabelCell, KeyValueTable,
-  Pagination, Modal, Breadcrumb,
-} from 'skyevantage-design-system';
-import { t, useLang } from '../i18n.js';
+import { primitives, semantic, space, radius, textStyles, shadows } from 'skyevantage-design-system';
+import { t, lang, useLang } from '../i18n.js';
 import { DSScope } from '../ds.jsx';
+import { DOCS, CATEGORIES } from './ds-docs.jsx';
+import { SCREENS } from '../screens/index.jsx';
 
-const ICONS = ['check', 'minus', 'plus', 'x', 'chevron-down', 'chevron-up', 'chevron-left', 'chevron-right', 'chevrons-up-down', 'pencil',
-  'ellipsis-vertical', 'info', 'circle-check', 'circle-x', 'triangle-alert', 'search', 'calendar', 'loader', 'arrow-left', 'trash', 'copy'];
-
+const FIGMA = 'https://www.figma.com/design/SPElEKzaDCu32XXersJofk/SkyeVantage-ERP---v2';
+const tx = (o) => (typeof o === 'string' ? t(o) : o[lang()]); // texto já bilíngue ({ pt, en }) ou chave do dicionário
 const copy = (v) => { try { navigator.clipboard.writeText(v); } catch { /* sem permissão de área de transferência */ } };
 const resolve = (v) => primitives[v] || v;
 const family = (k) => k.replace(/-\d+$/, '');
@@ -18,32 +14,18 @@ const FAMILIES = [...new Set(Object.keys(primitives).map(family))];
 const SEMANTIC_GROUPS = ['bg', 'text', 'border', 'icon'];
 const STYLE_GROUPS = ['display', 'title', 'body', 'label', 'caption'];
 
-const H3 = ({ children }) => <h3 className="st-display-md">{children}</h3>;
-const Muted = ({ children }) => <p className="st-body-sm muted" style={{ maxWidth: '68ch' }}>{children}</p>;
-// Os componentes do design system são só para tema claro: ficam num painel claro, também no tema escuro do Studio.
-const Panel = ({ children, className = '' }) => (
-  <div className={`sv rounded-[var(--radius-lg)] border border-[color:var(--border-subdued)] bg-[var(--bg-surface)] p-[var(--space-24)] text-[color:var(--text-primary)] ${className}`}>{children}</div>
-);
-const Group = ({ label, children }) => (
-  <div className="mb-[var(--space-24)] flex flex-col gap-[var(--space-8)] last:mb-0">
-    <span className="t-label-sm text-[color:var(--text-secondary)]">{label}</span>
-    <div className="flex flex-wrap items-center gap-[var(--space-16)]">{children}</div>
-  </div>
-);
-const Row = ({ children }) => <div className="flex flex-wrap items-start gap-[var(--space-16)]">{children}</div>;
-
-/** Abas sem fundo: texto na cor do Studio, só a selecionada tem contorno e negrito. */
+/** Abas como no Figma (BoxedTabGroup): a atual tem caixa e cor de link; as outras só a linha de baixo. */
 function TabBar({ tabs, value, onChange }) {
   return (
-    <div role="tablist" className="flex flex-wrap gap-[var(--space-8)]">
+    <div role="tablist" className="flex border-b border-[color:var(--c-border-default)]">
       {tabs.map(({ id, label }) => {
         const on = value === id;
         return (
           <button key={id} type="button" role="tab" aria-selected={on} onClick={() => onChange(id)}
-            className={`h-10 rounded-full border bg-transparent px-[var(--space-16)] text-sm text-[color:var(--c-text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${
-              on ? 'border-[color:var(--c-border-focus)] font-bold' : 'border-transparent font-normal hover:border-[color:var(--c-border-strong)]'}`}>
-            {/* o rótulo em negrito reserva a largura, para as abas não pularem ao selecionar */}
-            <span className="grid"><span className="col-start-1 row-start-1">{label}</span><span aria-hidden="true" className="invisible col-start-1 row-start-1 font-bold">{label}</span></span>
+            className={`-mb-px flex items-center justify-center px-4 py-[10px] text-[16px] font-medium leading-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] ${
+              on ? 'rounded-t-lg border border-b-0 border-solid border-[#e4e6e7] bg-white text-[#9a6e13]'
+                : 'border-b border-transparent bg-transparent text-[color:var(--c-text-primary)] hover:text-[color:var(--c-text-secondary)]'}`}>
+            {label}
           </button>
         );
       })}
@@ -51,355 +33,172 @@ function TabBar({ tabs, value, onChange }) {
   );
 }
 
-/** Filtros: nenhum marcado mostra tudo; marcados mostram só os escolhidos. */
-function FilterBar({ groups, selected, onToggle, onClear }) {
+/** Filtros de uma escolha: um marcado por vez, sem ícone. Usa o estilo do FilterTag do design system. */
+function FilterBar({ groups, value, onPick }) {
   return (
-    <div className="flex flex-col gap-[var(--space-12)]" role="group" aria-label={t('Filtros')}>
+    <div className="flex flex-col gap-4" role="group" aria-label={t('Filtros')}>
       {groups.map((g) => (
-        <div key={g.label} className="flex flex-col gap-[var(--space-8)]">
+        <div key={g.label} className="flex flex-col gap-2">
           <span className="st-label-md muted">{g.label.toUpperCase()}</span>
-          <div className="sv flex flex-wrap gap-[var(--space-8)]">
+          <div className="flex flex-wrap gap-2">
             {g.items.map(({ id, label }) => (
-              <FilterTag key={id} applied={selected.has(id)} onClick={() => onToggle(id)} onRemove={() => onToggle(id)}>{label}</FilterTag>
+              <button key={id} type="button" aria-pressed={value === id} onClick={() => onPick(id)} className="sv sv-filtertag">{label}</button>
             ))}
           </div>
         </div>
       ))}
-      {selected.size > 0 && (
-        <div className="sv self-start"><Button variant="link" size="sm" onClick={onClear} className="!text-[color:var(--text-link-hover)]">{t('Limpar filtros')}</Button></div>
-      )}
     </div>
   );
 }
 
-function Swatch({ name, value, token }) {
-  return (
-    <button type="button" onClick={() => copy(value)} title={`${t('Copiar')} ${value}`}
-      className="flex flex-col overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--border-default)] bg-[var(--bg-surface)] p-0 text-left text-[color:var(--text-primary)]">
-      <span className="h-14 border-b border-[color:var(--border-subdued)]" style={{ background: value }} />
-      <span className="flex flex-col gap-[2px] p-[var(--space-8)]">
-        <b className="t-label-md">{name}</b>
-        <span className="t-caption-lg text-[color:var(--text-secondary)]">{token}</span>
-        <span className="t-caption-lg">{value}</span>
-      </span>
-    </button>
-  );
-}
+const Header = ({ kicker, title, children }) => (
+  <header className="chead">
+    <div className="row"><span className="st-label-md muted">{kicker}</span></div>
+    <h2 className="st-headline-bold-40">{title}</h2>
+    {children && <p className="st-body-md">{children}</p>}
+  </header>
+);
+
+const Swatch = ({ name, value, token, note }) => (
+  <button type="button" className="swatch" onClick={() => copy(value)} title={`${t('Copiar')} ${value}`}>
+    <span className="c" style={{ background: value }} />
+    <span className="t"><b className="st-label-md">{name}</b><span className="mono muted">{token}</span><span className="mono">{value}</span>{note && <span className="st-body-xs muted">{note}</span>}</span>
+  </button>
+);
 
 /* ---------------- Tokens ---------------- */
 const TOKEN_FILTERS = [
-  { label: t('Cores primitivas'), items: FAMILIES.map((f) => ({ id: `p-${f}`, label: f })) },
-  { label: t('Cores semânticas'), items: SEMANTIC_GROUPS.map((g) => ({ id: `s-${g}`, label: g })) },
-  { label: t('Escalas'), items: [{ id: 'x-space', label: 'Espaçamento' }, { id: 'x-radius', label: 'Raio de borda' }, { id: 'x-shadow', label: 'Sombras' }] },
+  { label: 'Cores primitivas', items: FAMILIES.map((f) => ({ id: `p-${f}`, label: f })) },
+  { label: 'Cores semânticas', items: SEMANTIC_GROUPS.map((g) => ({ id: `s-${g}`, label: g })) },
+  { label: 'Escalas', items: [{ id: 'x-space', label: 'Espaçamento' }, { id: 'x-radius', label: 'Raio de borda' }, { id: 'x-shadow', label: 'Sombras' }] },
 ];
 
-function Tokens({ show }) {
-  const fams = FAMILIES.filter((f) => show(`p-${f}`));
-  const sems = SEMANTIC_GROUPS.filter((g) => show(`s-${g}`));
+function Tokens({ pick }) {
+  const [kind, key] = [pick.slice(0, 1), pick.slice(2)];
+  if (kind === 'p') {
+    const items = Object.entries(primitives).filter(([k]) => family(k) === key);
+    return (
+      <article className="component">
+        <Header kicker={`TOKENS / ${t('Cores primitivas').toUpperCase()}`} title={key}>{t('A paleta base. Clique numa cor para copiar o valor. Os componentes não usam estas cores direto: usam as semânticas, que apontam para elas.')}</Header>
+        <div className="swatches">{items.map(([k, v]) => <Swatch key={k} name={k} value={v} token={`--${k}`} />)}</div>
+      </article>
+    );
+  }
+  if (kind === 's') {
+    const items = Object.entries(semantic).filter(([k]) => k.startsWith(`${key}-`));
+    return (
+      <article className="component">
+        <Header kicker={`TOKENS / ${t('Cores semânticas').toUpperCase()}`} title={key}>{t('Papéis de cor lidos pelos componentes. Cada um aponta para uma cor primitiva, então trocar a paleta não exige mexer nos componentes.')}</Header>
+        <div className="swatches">{items.map(([k, v]) => <Swatch key={k} name={k} value={resolve(v)} token={`--${k}`} note={`→ ${v}`} />)}</div>
+      </article>
+    );
+  }
+  if (key === 'space') {
+    return (
+      <article className="component">
+        <Header kicker="TOKENS" title={t('Espaçamento')}>{t('Escala de espaçamento em pixels. Use sempre um destes valores para margens, vãos e preenchimentos.')}</Header>
+        <div className="card pad" style={{ display: 'grid', gap: 10 }}>{Object.entries(space).map(([k, v]) => <div className="sp" key={k}><span className="mono">--space-{k}</span><i style={{ width: v }} /><span className="mono muted">{v}px</span></div>)}</div>
+      </article>
+    );
+  }
+  if (key === 'radius') {
+    return (
+      <article className="component">
+        <Header kicker="TOKENS" title={t('Raio de borda')}>{t('Cantos arredondados. O botão usa o raio de pílula; campos e cartões usam o médio.')}</Header>
+        <div className="card pad" style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+          {Object.entries(radius).map(([k, v]) => <div className="tile" key={k}><div className="tile__box" style={{ border: '2px solid var(--c-surface-inverse)', background: 'var(--c-neutral-100)', borderRadius: Math.min(v, 28) }} /><span className="mono">--radius-{k}</span><span className="mono muted">{v >= 999 ? t('pílula') : `${v}px`}</span></div>)}
+        </div>
+      </article>
+    );
+  }
   return (
-    <>
-      <Muted>{t('Clique numa cor para copiar o valor. Os tokens viram variáveis CSS (por exemplo --bg-action-primary) quando o <DSStyles /> está montado.')}</Muted>
-      {fams.length > 0 && <H3>{t('Cores primitivas')}</H3>}
-      {fams.map((f) => (
-        <section key={f} className="flex flex-col gap-[var(--space-8)]">
-          <h4 className="st-label-md muted">{f.toUpperCase()}</h4>
-          <div className="grid gap-[var(--space-12)]" style={{ gridTemplateColumns: 'repeat(auto-fill,minmax(150px,1fr))' }}>
-            {Object.entries(primitives).filter(([k]) => family(k) === f).map(([k, v]) => <Swatch key={k} name={k} value={v} token={`--${k}`} />)}
-          </div>
-        </section>
-      ))}
-      {sems.length > 0 && <H3>{t('Cores semânticas')}</H3>}
-      {sems.length > 0 && <Muted>{t('Papéis de cor usados pelos componentes. Cada um aponta para uma cor primitiva.')}</Muted>}
-      {sems.map((g) => (
-        <section key={g} className="flex flex-col gap-[var(--space-8)]">
-          <h4 className="st-label-md muted">{g.toUpperCase()}</h4>
-          <div className="grid gap-[var(--space-12)]" style={{ gridTemplateColumns: 'repeat(auto-fill,minmax(200px,1fr))' }}>
-            {Object.entries(semantic).filter(([k]) => k.startsWith(`${g}-`)).map(([k, v]) => (
-              <Swatch key={k} name={k} value={resolve(v)} token={`--${k} → ${v}`} />
-            ))}
-          </div>
-        </section>
-      ))}
-      {show('x-space') && (
-        <>
-          <H3>{t('Espaçamento')}</H3>
-          <Panel className="flex flex-col gap-[var(--space-8)]">
-            {Object.entries(space).map(([k, v]) => (
-              <div key={k} className="flex items-center gap-[var(--space-16)]">
-                <span className="t-caption-lg w-24">--space-{k}</span>
-                <i className="block h-3 rounded-[2px] bg-[var(--bg-action-primary)]" style={{ width: v }} />
-                <span className="t-caption-lg text-[color:var(--text-secondary)]">{v}px</span>
-              </div>
-            ))}
-          </Panel>
-        </>
-      )}
-      {show('x-radius') && (
-        <>
-          <H3>{t('Raio de borda')}</H3>
-          <Row>
-            {Object.entries(radius).map(([k, v]) => (
-              <Panel key={k} className="flex w-36 flex-col items-center gap-[var(--space-8)]">
-                <div className="h-16 w-16 border-2 border-[color:var(--border-action-outline)] bg-[var(--bg-surface-subdued)]" style={{ borderRadius: Math.min(v, 32) }} />
-                <span className="t-caption-lg">--radius-{k}</span>
-                <span className="t-caption-lg text-[color:var(--text-secondary)]">{v >= 999 ? t('pílula') : `${v}px`}</span>
-              </Panel>
-            ))}
-          </Row>
-        </>
-      )}
-      {show('x-shadow') && (
-        <>
-          <H3>{t('Sombras')}</H3>
-          <Row>
-            {Object.entries(shadows).map(([k, v]) => (
-              <Panel key={k} className="flex w-44 flex-col items-center gap-[var(--space-8)]">
-                <div className="h-16 w-24 rounded-[var(--radius-md)] bg-[var(--bg-surface)]" style={{ boxShadow: v }} />
-                <span className="t-caption-lg">--shadow-{k}</span>
-              </Panel>
-            ))}
-          </Row>
-        </>
-      )}
-    </>
+    <article className="component">
+      <Header kicker="TOKENS" title={t('Sombras')}>{t('Elevação. Quanto maior o número, mais o elemento flutua sobre a tela.')}</Header>
+      <div className="card pad" style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+        {Object.entries(shadows).map(([k, v]) => <div className="tile" key={k}><div className="tile__box" style={{ background: 'var(--c-surface-default)', borderRadius: 12, boxShadow: v }} /><span className="mono">--shadow-{k}</span></div>)}
+      </div>
+    </article>
   );
 }
 
 /* ---------------- Estilos de texto ---------------- */
-const STYLE_FILTERS = [{ label: t('Grupos'), items: STYLE_GROUPS.map((g) => ({ id: g, label: g })) }];
+const STYLE_FILTERS = [{ label: 'Grupos', items: STYLE_GROUPS.map((g) => ({ id: g, label: g })) }];
+const STYLE_NOTE = {
+  display: { pt: 'Números e títulos de maior destaque.', en: 'Largest numbers and headings.' },
+  title: { pt: 'Títulos de página e de seção.', en: 'Page and section titles.' },
+  body: { pt: 'Texto corrido e conteúdo de campos.', en: 'Body text and field content.' },
+  label: { pt: 'Rótulos de botão, campo e item de menu.', en: 'Button, field and menu item labels.' },
+  caption: { pt: 'Legendas e textos de apoio muito pequenos.', en: 'Captions and very small supporting text.' },
+};
 
-function Styles({ show }) {
+function Styles({ pick }) {
   return (
-    <>
-      <Muted>{t('Estilos de texto da família Inter. Cada um vira uma classe (por exemplo .t-title-lg).')}</Muted>
-      {STYLE_GROUPS.filter(show).map((g) => (
-        <section key={g} className="flex flex-col gap-[var(--space-8)]">
-          <h4 className="st-label-md muted">{g.toUpperCase()}</h4>
-          <Panel className="flex flex-col gap-[var(--space-16)]">
-            {Object.entries(textStyles).filter(([k]) => k.startsWith(`${g}-`)).map(([k, [size, line, weight, ls]]) => (
-              <div key={k} className="flex flex-wrap items-baseline justify-between gap-[var(--space-16)] border-b border-[color:var(--border-subdued)] pb-[var(--space-12)] last:border-0 last:pb-0">
-                <span className={`t-${k}`}>{t('Telhados que duram, com orçamento claro')}</span>
-                <span className="t-caption-lg text-[color:var(--text-secondary)]">.t-{k} · Inter · {size}/{line} · {t('peso')} {weight}{ls ? ` · ${ls}` : ''}</span>
-              </div>
-            ))}
-          </Panel>
-        </section>
+    <article className="component">
+      <Header kicker={`TOKENS / ${t('Estilos de texto').toUpperCase()}`} title={pick}>{tx(STYLE_NOTE[pick])} {t('Família Inter. Cada estilo vira uma classe, por exemplo .t-title-lg.')}</Header>
+      {Object.entries(textStyles).filter(([k]) => k.startsWith(`${pick}-`)).map(([k, [size, line, weight, ls]]) => (
+        <div className="card pad spec" key={k}>
+          <span className={`t-${k}`}>{t('Telhados que duram, com orçamento claro')}</span>
+          <span className="mono muted">.t-{k} · Inter · {size}/{line} · {t('peso')} {weight}{ls ? ` · ${ls}` : ''}</span>
+        </div>
       ))}
-    </>
+    </article>
   );
 }
 
 /* ---------------- Componentes ---------------- */
-const Props = ({ rows }) => (
-  <table className="t-body-sm mt-[var(--space-24)] w-full border-collapse text-left text-[color:var(--text-primary)]">
-    <thead><tr className="text-[color:var(--text-secondary)]"><th className="py-2 pr-4 font-medium">Prop</th><th className="py-2 pr-4 font-medium">{t('Valores')}</th><th className="py-2 font-medium">{t('Padrão')}</th></tr></thead>
-    <tbody>{rows.map(([p, v, d]) => (
-      <tr key={p} className="border-t border-[color:var(--border-subdued)]"><td className="t-caption-lg py-2 pr-4">{p}</td><td className="py-2 pr-4">{v}</td><td className="t-caption-lg py-2">{d || '—'}</td></tr>
-    ))}</tbody>
-  </table>
-);
+const COMPONENT_FILTERS = CATEGORIES.map(([id, label]) => ({ label, items: DOCS.filter((d) => d.cat === id).map((d) => ({ id: d.name, label: d.name })) }));
 
-function Spec({ name, desc, props, children }) {
+function Component({ pick }) {
+  const d = DOCS.find((x) => x.name === pick) || DOCS[0];
+  const cat = CATEGORIES.find(([id]) => id === d.cat)[1];
+  const used = d.used.map((id) => SCREENS.find((s) => s.id === id)?.label).filter(Boolean);
   return (
-    <section className="flex flex-col gap-[var(--space-8)]">
-      <h4 className="st-label-md muted" style={{ textTransform: 'none' }}>{name}</h4>
-      <Panel>
-        <div className="t-body-sm mb-[var(--space-24)] max-w-[68ch] text-[color:var(--text-secondary)]">{desc}</div>
-        {children}
-        {props && <Props rows={props} />}
-      </Panel>
-    </section>
-  );
-}
-
-const GROUPS = {
-  acoes: ['Button', 'IconButton'],
-  forms: ['Input', 'Select', 'Textarea', 'Checkbox', 'Radio', 'RadioCard'],
-  status: ['Tag', 'Badge', 'FilterTag'],
-  feedback: ['Banner', 'Toast', 'Modal'],
-  nav: ['BoxedTabs', 'SegmentedControl', 'Breadcrumb', 'DropdownMenu'],
-  dados: ['MetricCard', 'Table', 'KeyValueTable', 'Pagination'],
-  icones: ['Icon'],
-};
-const GROUP_LABEL = { acoes: 'Ações', forms: 'Formulários', status: 'Status', feedback: 'Feedback', nav: 'Navegação', dados: 'Dados', icones: 'Ícones' };
-const COMPONENT_FILTERS = [{ label: t('Componentes'), items: Object.values(GROUPS).flat().map((n) => ({ id: n, label: n })) }];
-
-function Components({ show }) {
-  const [tab, setTab] = useState('a');
-  const [seg, setSeg] = useState('manual');
-  const [card, setCard] = useState('report');
-  const [chip, setChip] = useState(true);
-  const [open, setOpen] = useState(false);
-  const w72 = 'w-72';
-  const items = {
-    Button: () => (
-      <Spec name="Button" desc={t('Ação principal ou secundária. Tem estados de carregando e desabilitado.')}
-        props={[['variant', 'primary | secondary | ghost | link | critical | success', 'primary'], ['size', 'sm | md | lg', 'md'], ['iconLeft / iconRight', 'icon name'], ['loading, disabled', 'boolean', 'false']]}>
-        <Group label={t('Variantes')}>{['primary', 'secondary', 'ghost', 'link', 'critical', 'success'].map((v) => <Button key={v} variant={v} iconLeft="plus">{v}</Button>)}</Group>
-        <Group label={t('Estados')}><Button>Default</Button><Button disabled>Disabled</Button><Button loading>Loading</Button></Group>
-        <Group label={t('Tamanhos')}><Button size="sm">Small</Button><Button size="md">Medium</Button><Button size="lg">Large</Button></Group>
-      </Spec>),
-    IconButton: () => (
-      <Spec name="IconButton" desc={t('Botão só com ícone. O label é obrigatório, para acessibilidade.')}
-        props={[['icon', 'icon name'], ['label', 'string (obrigatório)'], ['variant', 'primary | secondary | ghost | …', 'secondary'], ['size', 'sm | md | lg', 'md']]}>
-        <Row><IconButton icon="pencil" label="Edit" /><IconButton icon="ellipsis-vertical" label="More" variant="ghost" /><IconButton icon="trash" label="Delete" variant="critical" /></Row>
-      </Spec>),
-    Input: () => (
-      <Spec name="Input" desc={t('Campo de texto com rótulo, texto de ajuda, ícones, complementos (addons) e estado de erro.')}
-        props={[['label, helper', 'string'], ['error', 'string | true'], ['size', 'sm | md | lg', 'md'], ['iconLeft / iconRight', 'icon name'], ['addonLeft / addonRight', 'string']]}>
-        <Row>
-          <div className={w72}><Input label="Total Roof Area" addonRight="ft²" defaultValue="3000" helper="Round up" /></div>
-          <div className={w72}><Input label="Search" iconLeft="search" placeholder="Search leads" /></div>
-          <div className={w72}><Input label="Estimate Name" error="Estimate name is required" placeholder="Enter the name" /></div>
-        </Row>
-      </Spec>),
-    Select: () => (
-      <Spec name="Select" desc={t('Lista de opções nativa, com rótulo e estado de erro.')}
-        props={[['label, helper, error', 'string'], ['size', 'sm | md | lg', 'md'], ['placeholder', 'string', 'Select an option']]}>
-        <div className={w72}><Select label="Roof Type"><option>Standard</option><option>Mansard</option></Select></div>
-      </Spec>),
-    Textarea: () => (
-      <Spec name="Textarea" desc={t('Campo de texto de várias linhas, com rótulo e texto de ajuda.')} props={[['label, helper, error', 'string']]}>
-        <div className={w72}><Textarea label="Notes" helper="0 / 800" /></div>
-      </Spec>),
-    Checkbox: () => (
-      <Spec name="Checkbox" desc={t('Seleção simples. Aceita estado indeterminado.')} props={[['label', 'string'], ['indeterminate', 'boolean', 'false']]}>
-        <Row><Checkbox label="Checked" defaultChecked /><Checkbox label="Indeterminate" indeterminate /><Checkbox label="Unchecked" /></Row>
-      </Spec>),
-    Radio: () => (
-      <Spec name="Radio" desc={t('Escolha de uma opção dentro de um grupo.')} props={[['label', 'string'], ['name', 'string (agrupa os radios)']]}>
-        <Row><Radio label="Option A" name="ds-r" defaultChecked /><Radio label="Option B" name="ds-r" /></Row>
-      </Spec>),
-    RadioCard: () => (
-      <Spec name="RadioCard" desc={t('Escolha de uma opção em formato de cartão, com título e descrição.')} props={[['title, description', 'string'], ['checked', 'boolean'], ['onChange', '(value) => void']]}>
-        <Row>
-          <RadioCard title="Order a measurement report" description="Charges apply." checked={card === 'report'} value="report" onChange={setCard} />
-          <RadioCard title="Enter measurements manually" description="Type the roof measurements yourself." checked={card === 'manual'} value="manual" onChange={setCard} />
-        </Row>
-      </Spec>),
-    Tag: () => (
-      <Spec name="Tag" desc={t('Mostra o estado de um item.')} props={[['color', 'success | warning | info | error', 'info'], ['styleType', 'subtle | solid', 'subtle']]}>
-        <Row><Tag color="success">Completed</Tag><Tag color="warning">Awaiting</Tag><Tag color="info">Scheduled</Tag><Tag color="error">Cancelled</Tag><Tag color="info" styleType="solid">Current</Tag></Row>
-      </Spec>),
-    Badge: () => (
-      <Spec name="Badge" desc={t('Selo curto, sem estado associado.')} props={[['color', 'primary | neutral | disabled', 'neutral']]}>
-        <Row><Badge color="primary">Primary</Badge><Badge>Neutral</Badge><Badge color="disabled">Disabled</Badge></Row>
-      </Spec>),
-    FilterTag: () => (
-      <Spec name="FilterTag" desc={t('Chip de filtro. Aplicado, mostra o botão de remover.')} props={[['applied', 'boolean', 'false'], ['onRemove', '() => void']]}>
-        <Row><FilterTag applied={chip} onClick={() => setChip(!chip)} onRemove={() => setChip(false)}>Chimneys</FilterTag><FilterTag>Skylights</FilterTag></Row>
-      </Spec>),
-    Banner: () => (
-      <Spec name="Banner" desc={t('Aviso dentro da página, em largura total.')} props={[['color', 'success | warning | info | error', 'info'], ['title', 'string']]}>
-        <Banner color="warning" title="1 required field left in 1 add-on">Exhaust Vent Type is required.</Banner>
-      </Spec>),
-    Toast: () => (
-      <Spec name="Toast" desc={t('Aviso flutuante, com botão de fechar.')} props={[['color', 'success | warning | info | error', 'info'], ['onDismiss', '() => void']]}>
-        <Toast color="success" title="Estimate set as active" onDismiss={() => {}} />
-      </Spec>),
-    Modal: () => (
-      <Spec name="Modal" desc={t('Janela que abre sobre a tela, com cabeçalho, corpo e rodapé.')} props={[['size', 'sm | md | lg', 'md'], ['open, onClose', 'boolean, () => void'], ['footer', 'node']]}>
-        <Button variant="ghost" onClick={() => setOpen(true)}>Open modal</Button>
-        <Modal open={open} title="Delete estimate?" size="sm" onClose={() => setOpen(false)}
-          footer={<><Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button><Button variant="critical" onClick={() => setOpen(false)}>Delete</Button></>}>
-          This cannot be undone.
-        </Modal>
-      </Spec>),
-    BoxedTabs: () => (
-      <Spec name="BoxedTabs" desc={t('Abas em caixa, para trocar de seção.')} props={[['tabs', '{ id, label }[]'], ['value, onChange', 'id, (id) => void']]}>
-        <BoxedTabs tabs={[{ id: 'a', label: 'Roof Measurements' }, { id: 'b', label: 'Materials' }, { id: 'c', label: 'Labor' }]} value={tab} onChange={setTab} />
-      </Spec>),
-    SegmentedControl: () => (
-      <Spec name="SegmentedControl" desc={t('Alternador entre poucas opções.')} props={[['options', '{ id, label }[]'], ['value, onChange', 'id, (id) => void']]}>
-        <SegmentedControl options={[{ id: 'manual', label: 'Enter manually' }, { id: 'report', label: 'Order a report' }]} value={seg} onChange={setSeg} />
-      </Spec>),
-    Breadcrumb: () => (
-      <Spec name="Breadcrumb" desc={t('Trilha de navegação. O último item é a página atual.')} props={[['items', '{ label, href? }[]']]}>
-        <Breadcrumb items={[{ label: 'Home' }, { label: 'Estimator' }, { label: 'Create Estimate' }]} />
-      </Spec>),
-    DropdownMenu: () => (
-      <Spec name="DropdownMenu" desc={t('Menu de opções ou de ações.')} props={[['items', '{ id, label, selected?, critical? }[]'], ['onSelect', '(id) => void']]}>
-        <div className="w-56"><DropdownMenu items={[{ id: 'edit', label: 'Edit' }, { id: 'copy', label: 'Make a copy' }, { id: 'del', label: 'Delete', critical: true }]} /></div>
-      </Spec>),
-    MetricCard: () => (
-      <Spec name="MetricCard" desc={t('Número de destaque, com rótulo.')} props={[['label, value', 'string']]}>
-        <div className="w-64"><MetricCard label="Total Cost" value="$450.00" /></div>
-      </Spec>),
-    Table: () => (
-      <Spec name="Table" desc={t('Tabela com colunas configuráveis.')} props={[['columns', '{ key, header, width?, sortable?, render?(row) }[]'], ['rows', 'array de objetos'], ['currentRow', '(row) => boolean']]}>
-        <Table
-          columns={[
-            { key: 'name', header: 'Estimate Name', sortable: true, render: (r) => <span className="sv-cell">{r.name}{r.current && <Tag color="info" showIcon={false}>Current</Tag>}</span> },
-            { key: 'by', header: 'Created By', sortable: true },
-            { key: 'b', header: 'Option B', sortable: true },
-            { key: 'p', header: 'Provider', render: () => <IconLabelCell icon="calendar">Zoom</IconLabelCell> },
-            { key: 'm', header: '', align: 'right', render: () => <IconButton icon="ellipsis-vertical" label="Row menu" variant="ghost" size="sm" /> },
-          ]}
-          rows={[{ id: 1, name: 'Design Ref - Standard', current: true, by: 'joao@popstand.com', b: '$450.00' }, { id: 2, name: 'Design Ref - Standard', by: 'joao@popstand.com', b: '$430.00' }]}
-          currentRow={(r) => r.current}
-        />
-      </Spec>),
-    KeyValueTable: () => (
-      <Spec name="KeyValueTable" desc={t('Pares de rótulo e valor, com botão de editar opcional.')} props={[['items', '{ label, value, onEdit? }[]']]}>
-        <KeyValueTable items={[{ label: 'Flat Fee', value: '$0.00', onEdit: () => {} }, { label: 'Labor', value: '$450.00', onEdit: () => {} }]} />
-      </Spec>),
-    Pagination: () => (
-      <Spec name="Pagination" desc={t('Navegação entre páginas, com linhas por página.')} props={[['page, pageCount', 'number'], ['rowsPerPage', 'number', '10'], ['onPage, onRowsPerPage', 'function']]}>
-        <Pagination page={1} pageCount={3} />
-      </Spec>),
-    Icon: () => (
-      <Spec name="Icon" desc={t('Só contorno, nunca preenchido. Use <Icon name="…" size={16} />.')} props={[['name', 'icon name'], ['size', 'number', '16']]}>
-        <div className="grid gap-[var(--space-12)]" style={{ gridTemplateColumns: 'repeat(auto-fill,minmax(110px,1fr))' }}>
-          {ICONS.map((n) => (
-            <div key={n} className="flex flex-col items-center gap-[var(--space-8)] rounded-[var(--radius-md)] border border-[color:var(--border-subdued)] p-[var(--space-12)]">
-              <Icon name={n} size={24} /><span className="t-caption-lg text-[color:var(--text-secondary)]">{n}</span>
-            </div>
-          ))}
+    <article className="component" aria-labelledby="comp-title">
+      <header className="chead">
+        <div className="row">
+          <span className="st-label-md muted">{t('COMPONENTES')} / {tx(cat).toUpperCase()}</span>
+          <span className="status status--ok">{t('estável')}</span>
+          <a className="st-body-sm" href={d.figma ? `${FIGMA}?node-id=${d.figma}` : FIGMA} target="_blank" rel="noreferrer">{t('Abrir no Figma ↗')}</a>
         </div>
-      </Spec>),
-  };
-  return (
-    <>
-      <Muted>{t('Todos os componentes do design system, com exemplos ao vivo. Importe de skyevantage-design-system.')}</Muted>
-      {Object.entries(GROUPS).map(([g, names]) => {
-        const visible = names.filter(show);
-        if (!visible.length) return null;
-        return (
-          <section key={g} className="flex flex-col gap-[var(--space-16)]">
-            <H3>{t(GROUP_LABEL[g])}</H3>
-            {visible.map((n) => <div key={n}>{items[n]()}</div>)}
-          </section>
-        );
-      })}
-    </>
+        <h2 id="comp-title" className="st-headline-bold-40">{d.name}</h2>
+        <p className="st-body-md">{tx(d.desc)}</p>
+      </header>
+      <div className="example"><div className="preview">{d.demo()}</div><pre className="code">{d.code}</pre></div>
+      <section>
+        <h4>Props</h4>
+        <div className="tablewrap"><table className="props"><thead><tr><th>{t('Nome')}</th><th>{t('Tipo')}</th><th>{t('Padrão')}</th><th>{t('Descrição')}</th></tr></thead>
+          <tbody>{d.props.map((p) => <tr key={p[0]}><td className="mono">{p[0]}</td><td className="mono">{p[1]}</td><td className="mono">{p[2]}</td><td>{tx(p[3])}</td></tr>)}</tbody></table></div>
+      </section>
+      <div className="dd"><div className="do"><b className="plus">{t('Faça')}</b><p className="st-body-sm">{tx(d.do)}</p></div><div className="dont"><b className="minus">{t('Evite')}</b><p className="st-body-sm">{tx(d.dont)}</p></div></div>
+      <p className="st-body-sm muted">{t('Tokens')}: <span className="mono">{d.tokens.join(', ')}</span><br />{t('Usado em')}: {used.length ? used.map((l) => t(l)).join(', ') : t('nenhuma tela ainda')}</p>
+    </article>
   );
 }
 
 const TABS = [
-  ['tokens', 'Tokens', Tokens, TOKEN_FILTERS],
-  ['estilos', 'Estilos de texto', Styles, STYLE_FILTERS],
-  ['componentes', 'Componentes', Components, COMPONENT_FILTERS],
+  ['tokens', 'Tokens', Tokens, TOKEN_FILTERS, 'p-primary'],
+  ['estilos', 'Estilos de texto', Styles, STYLE_FILTERS, 'display'],
+  ['componentes', 'Componentes', Component, COMPONENT_FILTERS, 'Button'],
 ];
 
 export function DesignSystemPage() {
   useLang();
   const [tab, setTab] = useState('tokens');
-  const [sel, setSel] = useState({ tokens: new Set(), estilos: new Set(), componentes: new Set() });
+  const [pick, setPick] = useState(Object.fromEntries(TABS.map(([id, , , , first]) => [id, first])));
   const [, , Cur, filters] = TABS.find(([id]) => id === tab);
-  const selected = sel[tab];
-  const toggle = (id) => setSel((s) => { const n = new Set(s[tab]); if (!n.delete(id)) n.add(id); return { ...s, [tab]: n }; });
-  const clear = () => setSel((s) => ({ ...s, [tab]: new Set() }));
-  // as abas ficam sem rótulos de grupo traduzidos em tempo de módulo: os rótulos dos filtros passam por t() aqui
-  const groups = filters.map((g) => ({ ...g, label: t(g.label), items: g.items.map((i) => ({ ...i, label: t(i.label) })) }));
-  const show = (id) => selected.size === 0 || selected.has(id);
+  const groups = filters.map((g) => ({ ...g, label: tx(g.label), items: g.items.map((i) => ({ ...i, label: tx(i.label) })) }));
   return (
     <div className="doc dsx">
       <DSScope />
       <h2 className="st-headline-bold-40">{t('Design system')} · SkyeVantage</h2>
       <p>{t('Tokens, estilos de texto e componentes do SkyeVantage ERP, instalados do pacote skyevantage-design-system (v0.1.0).')}</p>
       <TabBar tabs={TABS.map(([id, label]) => ({ id, label: t(label) }))} value={tab} onChange={setTab} />
-      <FilterBar groups={groups} selected={selected} onToggle={toggle} onClear={clear} />
-      <Cur show={show} />
+      <div className="grid items-start gap-6 lg:grid-cols-[190px_minmax(0,1fr)]">
+        <div className="lg:sticky lg:top-[calc(var(--top-h,0px)+16px)] lg:max-h-[calc(100vh-var(--top-h,0px)-32px)] lg:overflow-auto">
+          <FilterBar groups={groups} value={pick[tab]} onPick={(id) => setPick((p) => ({ ...p, [tab]: id }))} />
+        </div>
+        <Cur pick={pick[tab]} />
+      </div>
     </div>
   );
 }

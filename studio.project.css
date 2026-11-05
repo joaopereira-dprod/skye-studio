@@ -2,3 +2,10 @@
 /* O Studio limita a largura a 1280px. Em desktop isso encolhe a moldura (também 1280px) quando o painel do Modo dev abre.
    Libera a largura para o protótipo usar o espaço da janela, com teto em 1920px. */
 .shell{max-width:min(100%,1920px)}
+
+/* Os exemplos do design system foram pensados para superfície branca (o link, por exemplo, só passa no contraste AA sobre branco).
+   Na Wiki, a área de exemplo (.preview) vira branca dentro da página do design system. */
+.wiki .dsx .preview{background:var(--bg-surface);border-color:var(--border-subdued)}
+
+/* Na Wiki o filtro escolhe um item por vez: o selecionado precisa se destacar dos demais (fundo escuro, texto branco). */
+.dsx .sv-filtertag[aria-pressed=true]{background:var(--bg-action-primary);border-color:var(--bg-action-primary);color:var(--text-on-action)}

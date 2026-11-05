@@ -16,3 +16,6 @@ const subscribe = (cb) => {
 export const useLang = () => useSyncExternalStore(subscribe, () => (isEn() ? 'en' : 'pt'));
 
 export const t = (pt) => (isEn() ? EN[pt] ?? pt : pt);
+
+/** Idioma atual ('pt' | 'en'), para textos que já vêm nos dois idiomas. */
+export const lang = () => (isEn() ? 'en' : 'pt');
