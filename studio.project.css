@@ -1,0 +1,3 @@
+/* O Studio limita a largura a 1280px. Em desktop isso encolhe a moldura (também 1280px) quando o painel do Modo dev abre.
+   Libera a largura para o protótipo usar o espaço da janela, com teto em 1920px. */
+.shell{max-width:min(100%,1920px)}
