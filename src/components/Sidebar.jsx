@@ -103,7 +103,7 @@ function ToggleButton({ isCollapsed }) {
   const label = isCollapsed ? t('Expandir menu') : t('Recolher menu');
   return (
     <button type="button" onClick={() => update({ collapsed: !isCollapsed })} aria-label={label} title={label} aria-expanded={!isCollapsed}
-      className="absolute right-[-12px] top-[22px] z-10 flex size-6 items-center justify-center rounded-full border border-[color:var(--border-default)] bg-[var(--bg-surface)] text-[color:var(--icon-default)] hover:bg-[var(--bg-surface-subdued)]">
+      className={`absolute right-[-16px] z-10 flex size-6 items-center justify-center rounded-full border border-[color:var(--border-default)] bg-[var(--bg-surface)] text-[color:var(--icon-default)] hover:bg-[var(--bg-surface-subdued)] ${isCollapsed ? 'top-4' : 'top-6'}`}>
       <Icon name={isCollapsed ? 'chevron-right' : 'chevron-left'} size={14} />
     </button>
   );
@@ -138,7 +138,7 @@ export function Sidebar({ active, go }) {
   return (
     <aside aria-label={t('Menu principal')} className={`${base} w-60 pb-[var(--space-16)] pt-[var(--space-8)]`}>
       <ToggleButton isCollapsed={false} />
-      <button type="button" title={t('Trocar franquia')} className="flex w-full flex-none items-center gap-[var(--space-8)] rounded-[var(--radius-sm)] bg-transparent p-[var(--space-12)] text-left hover:bg-[var(--bg-surface-subdued)]">
+      <button type="button" title={t('Trocar franquia')} className="flex w-full flex-none items-center gap-[var(--space-8)] rounded-[var(--radius-sm)] bg-transparent py-[var(--space-12)] pl-[var(--space-12)] pr-[var(--space-24)] text-left hover:bg-[var(--bg-surface-subdued)]">
         <span className="flex size-8 flex-none items-center justify-center rounded-[var(--radius-sm)] bg-[var(--bg-action-outline-pressed)]"><img src={headerBuilding} alt="" width={16} height={16} /></span>
         <span className="flex min-w-0 flex-1 flex-col whitespace-nowrap">
           <span className="t-label-md text-[color:var(--text-primary)]">Popstand Franchise</span>
