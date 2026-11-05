@@ -14,7 +14,7 @@ export function Orcamentos({ go }) {
           ['#1039', 'Paulo Menezes', '95 m²', 'R$ 11.750', <Status>Recusado</Status>],
         ]}
       />
-      <Button variant="link" className="mt-[var(--space-16)]" onClick={() => go('projetos')}>{t('Ver projetos dos orçamentos aprovados')}</Button>
+      <Button variant="link" className="mt-[var(--space-16)] !text-[color:var(--text-link-hover)]" onClick={() => go('projetos')}>{t('Ver projetos dos orçamentos aprovados')}</Button>
     </Shell>
   );
 }

@@ -18,7 +18,7 @@ export function Leads({ go }) {
           ['Ana Beatriz Lopes', '(41) 99999-0071', 'Instagram', <Status>Visita agendada</Status>, 'Skye Curitiba'],
         ]}
       />
-      <Button variant="link" className="mt-[var(--space-16)]" onClick={() => go('orcamentos')}>{t('Ver orçamentos deste lead')}</Button>
+      <Button variant="link" className="mt-[var(--space-16)] !text-[color:var(--text-link-hover)]" onClick={() => go('orcamentos')}>{t('Ver orçamentos deste lead')}</Button>
     </Shell>
   );
 }

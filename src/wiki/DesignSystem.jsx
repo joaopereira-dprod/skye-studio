@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import {
-  DSStyles, primitives, semantic, space, radius, textStyles, shadows, Icon,
+  primitives, semantic, space, radius, textStyles, shadows, Icon,
   Button, IconButton, Input, Select, Textarea, Checkbox, Radio, RadioCard, Tag, Badge, FilterTag,
   Banner, Toast, BoxedTabs, SegmentedControl, DropdownMenu, MetricCard, Table, IconLabelCell, KeyValueTable,
   Pagination, Modal, Breadcrumb,
 } from 'skyevantage-design-system';
 import { t, useLang } from '../i18n.js';
+import { DSScope } from '../ds.jsx';
 
 const ICONS = ['check', 'minus', 'plus', 'x', 'chevron-down', 'chevron-up', 'chevron-left', 'chevron-right', 'chevrons-up-down', 'pencil',
   'ellipsis-vertical', 'info', 'circle-check', 'circle-x', 'triangle-alert', 'search', 'calendar', 'loader', 'arrow-left', 'trash', 'copy'];
@@ -15,22 +16,28 @@ const resolve = (v) => primitives[v] || v;
 const family = (k) => k.replace(/-\d+$/, '');
 const FAMILIES = [...new Set(Object.keys(primitives).map(family))];
 
-const H3 = ({ children }) => <h3 className="st-display-md" style={{ marginTop: 32 }}>{children}</h3>;
+const H3 = ({ children }) => <h3 className="st-display-md">{children}</h3>;
 const Muted = ({ children }) => <p className="st-body-sm muted" style={{ maxWidth: '68ch' }}>{children}</p>;
 // Os componentes do design system são só para tema claro: ficam num painel claro, também no tema escuro do Studio.
 const Panel = ({ children, className = '' }) => (
-  <div className={`sv rounded-[var(--radius-lg)] border border-[var(--border-subdued)] bg-[var(--bg-surface)] p-[var(--space-24)] text-[var(--text-primary)] ${className}`}>{children}</div>
+  <div className={`sv rounded-[var(--radius-lg)] border border-[color:var(--border-subdued)] bg-[var(--bg-surface)] p-[var(--space-24)] text-[color:var(--text-primary)] ${className}`}>{children}</div>
+);
+const Group = ({ label, children }) => (
+  <div className="mb-[var(--space-24)] flex flex-col gap-[var(--space-8)] last:mb-0">
+    <span className="t-label-sm text-[color:var(--text-secondary)]">{label}</span>
+    <div className="flex flex-wrap items-center gap-[var(--space-16)]">{children}</div>
+  </div>
 );
 const Row = ({ children }) => <div className="flex flex-wrap items-start gap-[var(--space-16)]">{children}</div>;
 
 function Swatch({ name, value, token }) {
   return (
     <button type="button" onClick={() => copy(value)} title={`${t('Copiar')} ${value}`}
-      className="flex flex-col overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-0 text-left text-[var(--text-primary)]">
-      <span className="h-14 border-b border-[var(--border-subdued)]" style={{ background: value }} />
+      className="flex flex-col overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--border-default)] bg-[var(--bg-surface)] p-0 text-left text-[color:var(--text-primary)]">
+      <span className="h-14 border-b border-[color:var(--border-subdued)]" style={{ background: value }} />
       <span className="flex flex-col gap-[2px] p-[var(--space-8)]">
         <b className="t-label-md">{name}</b>
-        <span className="t-caption-lg text-[var(--text-secondary)]">{token}</span>
+        <span className="t-caption-lg text-[color:var(--text-secondary)]">{token}</span>
         <span className="t-caption-lg">{value}</span>
       </span>
     </button>
@@ -40,7 +47,7 @@ function Swatch({ name, value, token }) {
 function Tokens() {
   return (
     <>
-      <Muted>{t('Clique numa cor para copiar o valor. Os tokens viram variáveis CSS (por exemplo --bg-action-primary) quando o <DSStyles /> está montado.')}</Muted>
+      <Muted>{t('Clique numa cor para copiar o valor. Os tokens viram variáveis CSS (por exemplo --bg-action-primary) quando o <DSScope /> está montado.')}</Muted>
       <H3>{t('Cores primitivas')}</H3>
       {FAMILIES.map((f) => (
         <section key={f} className="flex flex-col gap-[var(--space-8)]">
@@ -68,7 +75,7 @@ function Tokens() {
           <div key={k} className="flex items-center gap-[var(--space-16)]">
             <span className="t-caption-lg w-24">--space-{k}</span>
             <i className="block h-3 rounded-[2px] bg-[var(--bg-action-primary)]" style={{ width: v }} />
-            <span className="t-caption-lg text-[var(--text-secondary)]">{v}px</span>
+            <span className="t-caption-lg text-[color:var(--text-secondary)]">{v}px</span>
           </div>
         ))}
       </Panel>
@@ -76,9 +83,9 @@ function Tokens() {
       <Row>
         {Object.entries(radius).map(([k, v]) => (
           <Panel key={k} className="flex w-36 flex-col items-center gap-[var(--space-8)]">
-            <div className="h-16 w-16 border-2 border-[var(--border-action-outline)] bg-[var(--bg-surface-subdued)]" style={{ borderRadius: Math.min(v, 32) }} />
+            <div className="h-16 w-16 border-2 border-[color:var(--border-action-outline)] bg-[var(--bg-surface-subdued)]" style={{ borderRadius: Math.min(v, 32) }} />
             <span className="t-caption-lg">--radius-{k}</span>
-            <span className="t-caption-lg text-[var(--text-secondary)]">{v >= 999 ? t('pílula') : `${v}px`}</span>
+            <span className="t-caption-lg text-[color:var(--text-secondary)]">{v >= 999 ? t('pílula') : `${v}px`}</span>
           </Panel>
         ))}
       </Row>
@@ -105,9 +112,9 @@ function Styles() {
           <h4 className="st-label-md muted">{g.toUpperCase()}</h4>
           <Panel className="flex flex-col gap-[var(--space-16)]">
             {Object.entries(textStyles).filter(([k]) => k.startsWith(`${g}-`)).map(([k, [size, line, weight, ls]]) => (
-              <div key={k} className="flex flex-wrap items-baseline justify-between gap-[var(--space-16)] border-b border-[var(--border-subdued)] pb-[var(--space-12)] last:border-0 last:pb-0">
+              <div key={k} className="flex flex-wrap items-baseline justify-between gap-[var(--space-16)] border-b border-[color:var(--border-subdued)] pb-[var(--space-12)] last:border-0 last:pb-0">
                 <span className={`t-${k}`}>{t('Telhados que duram, com orçamento claro')}</span>
-                <span className="t-caption-lg text-[var(--text-secondary)]">.t-{k} · Inter · {size}/{line} · {t('peso')} {weight}{ls ? ` · ${ls}` : ''}</span>
+                <span className="t-caption-lg text-[color:var(--text-secondary)]">.t-{k} · Inter · {size}/{line} · {t('peso')} {weight}{ls ? ` · ${ls}` : ''}</span>
               </div>
             ))}
           </Panel>
@@ -118,10 +125,10 @@ function Styles() {
 }
 
 const Props = ({ rows }) => (
-  <table className="t-body-sm mt-[var(--space-12)] w-full border-collapse text-left">
-    <thead><tr className="text-[var(--text-secondary)]"><th className="py-1 pr-4 font-medium">Prop</th><th className="py-1 pr-4 font-medium">{t('Valores')}</th><th className="py-1 font-medium">{t('Padrão')}</th></tr></thead>
+  <table className="t-body-sm mt-[var(--space-24)] w-full border-collapse text-left text-[color:var(--text-primary)]">
+    <thead><tr className="text-[color:var(--text-secondary)]"><th className="py-2 pr-4 font-medium">Prop</th><th className="py-2 pr-4 font-medium">{t('Valores')}</th><th className="py-2 font-medium">{t('Padrão')}</th></tr></thead>
     <tbody>{rows.map(([p, v, d]) => (
-      <tr key={p} className="border-t border-[var(--border-subdued)]"><td className="t-caption-lg py-1 pr-4">{p}</td><td className="py-1 pr-4">{v}</td><td className="t-caption-lg py-1">{d || '—'}</td></tr>
+      <tr key={p} className="border-t border-[color:var(--border-subdued)]"><td className="t-caption-lg py-2 pr-4">{p}</td><td className="py-2 pr-4">{v}</td><td className="t-caption-lg py-2">{d || '—'}</td></tr>
     ))}</tbody>
   </table>
 );
@@ -131,7 +138,7 @@ function Spec({ name, desc, props, children }) {
     <section className="flex flex-col gap-[var(--space-8)]">
       <h4 className="st-label-md muted" style={{ textTransform: 'none' }}>{name}</h4>
       <Panel>
-        <p className="t-body-sm mb-[var(--space-16)] text-[var(--text-secondary)]">{desc}</p>
+        <div className="t-body-sm mb-[var(--space-24)] max-w-[68ch] text-[color:var(--text-secondary)]">{desc}</div>
         {children}
         {props && <Props rows={props} />}
       </Panel>
@@ -151,11 +158,11 @@ function Components() {
       <H3>{t('Ações')}</H3>
       <Spec name="Button" desc={t('Ação principal ou secundária. Tem estados de carregando e desabilitado.')}
         props={[['variant', 'primary | secondary | ghost | link | critical | success', 'primary'], ['size', 'sm | md | lg', 'md'], ['iconLeft / iconRight', 'icon name'], ['loading, disabled', 'boolean', 'false']]}>
-        <Row>
+        <Group label={t('Variantes')}>
           {['primary', 'secondary', 'ghost', 'link', 'critical', 'success'].map((v) => <Button key={v} variant={v} iconLeft="plus">{v}</Button>)}
-          <Button disabled>Disabled</Button><Button loading>Loading</Button>
-        </Row>
-        <div className="mt-[var(--space-16)]"><Row><Button size="sm">Small</Button><Button size="md">Medium</Button><Button size="lg">Large</Button></Row></div>
+        </Group>
+        <Group label={t('Estados')}><Button>Default</Button><Button disabled>Disabled</Button><Button loading>Loading</Button></Group>
+        <Group label={t('Tamanhos')}><Button size="sm">Small</Button><Button size="md">Medium</Button><Button size="lg">Large</Button></Group>
       </Spec>
       <Spec name="IconButton" desc={t('Botão só com ícone. O label é obrigatório, para acessibilidade.')}
         props={[['icon', 'icon name'], ['label', 'string (obrigatório)'], ['variant', 'primary | secondary | ghost | …', 'secondary'], ['size', 'sm | md | lg', 'md']]}>
@@ -236,8 +243,8 @@ function Components() {
       <Spec name="Icon" desc={t('Só contorno, nunca preenchido. Use <Icon name="…" size={16} />.')}>
         <div className="grid gap-[var(--space-12)]" style={{ gridTemplateColumns: 'repeat(auto-fill,minmax(110px,1fr))' }}>
           {ICONS.map((n) => (
-            <div key={n} className="flex flex-col items-center gap-[var(--space-8)] rounded-[var(--radius-md)] border border-[var(--border-subdued)] p-[var(--space-12)]">
-              <Icon name={n} size={24} /><span className="t-caption-lg text-[var(--text-secondary)]">{n}</span>
+            <div key={n} className="flex flex-col items-center gap-[var(--space-8)] rounded-[var(--radius-md)] border border-[color:var(--border-subdued)] p-[var(--space-12)]">
+              <Icon name={n} size={24} /><span className="t-caption-lg text-[color:var(--text-secondary)]">{n}</span>
             </div>
           ))}
         </div>
@@ -253,11 +260,11 @@ export function DesignSystemPage() {
   const [tab, setTab] = useState('tokens');
   const Cur = TABS.find(([id]) => id === tab)[2];
   return (
-    <div className="doc">
-      <DSStyles />
+    <div className="doc dsx">
+      <DSScope />
       <h2 className="st-headline-bold-40">{t('Design system')} · SkyeVantage</h2>
       <p>{t('Tokens, estilos de texto e componentes do SkyeVantage ERP, instalados do pacote skyevantage-design-system (v0.1.0).')}</p>
-      <div className="sv"><BoxedTabs tabs={TABS.map(([id, label]) => ({ id, label: t(label) }))} value={tab} onChange={setTab} /></div>
+      <div className="sv self-start overflow-hidden rounded-[var(--radius-md)] border border-[color:var(--border-subdued)] bg-[var(--bg-surface-secondary)] px-[var(--space-8)] pt-[var(--space-8)]"><BoxedTabs tabs={TABS.map(([id, label]) => ({ id, label: t(label) }))} value={tab} onChange={setTab} /></div>
       <Cur />
     </div>
   );

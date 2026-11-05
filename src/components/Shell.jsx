@@ -1,5 +1,6 @@
-import { DSStyles, Button, Table as DSTable, MetricCard, Tag as DSTag, Badge } from 'skyevantage-design-system';
+import { Button, Table as DSTable, MetricCard, Tag as DSTag, Badge } from 'skyevantage-design-system';
 import { t, useLang } from '../i18n.js';
+import { DSScope } from '../ds.jsx';
 
 const NAV = [
   { id: 'projetos', label: 'Projetos' },
@@ -30,10 +31,10 @@ export function Role({ children }) {
 export function Shell({ active, go, title, action, children }) {
   useLang();
   return (
-    <div className="flex h-full bg-[var(--bg-surface-secondary)] text-[var(--text-primary)]">
-      <DSStyles />
-      <aside className="flex w-60 flex-col border-r border-[var(--border-subdued)] bg-[var(--bg-surface)] p-[var(--space-16)]">
-        <div className="t-title-xs mb-[var(--space-24)] px-[var(--space-8)] text-[var(--text-brand)]">Skye Advantage</div>
+    <div className="dsx flex h-full bg-[var(--bg-surface-secondary)] text-[color:var(--text-primary)]">
+      <DSScope />
+      <aside className="flex w-60 flex-col border-r border-[color:var(--border-subdued)] bg-[var(--bg-surface)] p-[var(--space-16)]">
+        <div className="t-title-xs mb-[var(--space-24)] px-[var(--space-8)] text-[color:var(--text-brand)]">Skye Advantage</div>
         <nav className="flex flex-col gap-[var(--space-4)]">
           {NAV.map((n) => (
             <button
@@ -43,8 +44,8 @@ export function Shell({ active, go, title, action, children }) {
               aria-current={active === n.id ? 'page' : undefined}
               className={`t-label-lg h-10 rounded-[var(--radius-md)] px-[var(--space-12)] text-left ${
                 active === n.id
-                  ? 'bg-[var(--bg-action-primary)] text-[var(--text-on-action)]'
-                  : 'bg-transparent text-[var(--text-secondary)] hover:bg-[var(--bg-surface-subdued)]'
+                  ? 'bg-[var(--bg-action-primary)] text-[color:var(--text-on-action)]'
+                  : 'bg-transparent text-[color:var(--text-secondary)] hover:bg-[var(--bg-surface-subdued)]'
               }`}
             >
               {t(n.label)}
