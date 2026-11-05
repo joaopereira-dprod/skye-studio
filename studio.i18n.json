@@ -143,6 +143,8 @@
     "Escala de espaçamento em pixels. Use sempre um destes valores para margens, vãos e preenchimentos.": "Spacing scale in pixels. Always use one of these values for margins, gaps and padding.",
     "Cantos arredondados. O botão usa o raio de pílula; campos e cartões usam o médio.": "Rounded corners. The button uses the pill radius; fields and cards use the medium one.",
     "Elevação. Quanto maior o número, mais o elemento flutua sobre a tela.": "Elevation. The higher the number, the more the element floats above the screen.",
-    "Família Inter. Cada estilo vira uma classe, por exemplo .t-title-lg.": "Inter family. Each style becomes a class, for example .t-title-lg."
+    "Família Inter. Cada estilo vira uma classe, por exemplo .t-title-lg.": "Inter family. Each style becomes a class, for example .t-title-lg.",
+    "Formulário": "Form",
+    "ESTILOS DE TEXTO": "TEXT STYLES"
   }
 }

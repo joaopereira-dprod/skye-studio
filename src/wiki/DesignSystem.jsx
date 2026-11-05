@@ -1,4 +1,7 @@
-import { useState } from 'react';
+// Páginas da Wiki para o design system SkyeVantage. Cada uma entra na barra lateral com itens filhos (ver WIKI_PAGES em studio.project.js):
+//   Tokens → cores primitivas, cores semânticas, espaçamento, raio de borda, sombras
+//   Estilos de texto → display, title, body, label, caption
+//   Componentes → uma seção por categoria, um item por componente
 import { primitives, semantic, space, radius, textStyles, shadows } from 'skyevantage-design-system';
 import { t, lang, useLang } from '../i18n.js';
 import { DSScope } from '../ds.jsx';
@@ -13,43 +16,6 @@ const family = (k) => k.replace(/-\d+$/, '');
 const FAMILIES = [...new Set(Object.keys(primitives).map(family))];
 const SEMANTIC_GROUPS = ['bg', 'text', 'border', 'icon'];
 const STYLE_GROUPS = ['display', 'title', 'body', 'label', 'caption'];
-
-/** Abas como no Figma (BoxedTabGroup): a atual tem caixa e cor de link; as outras só a linha de baixo. */
-function TabBar({ tabs, value, onChange }) {
-  return (
-    <div role="tablist" className="flex border-b border-[color:var(--c-border-default)]">
-      {tabs.map(({ id, label }) => {
-        const on = value === id;
-        return (
-          <button key={id} type="button" role="tab" aria-selected={on} onClick={() => onChange(id)}
-            className={`-mb-px flex items-center justify-center px-4 py-[10px] text-[16px] font-medium leading-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] ${
-              on ? 'rounded-t-lg border border-b-0 border-solid border-[#e4e6e7] bg-white text-[#9a6e13]'
-                : 'border-b border-transparent bg-transparent text-[color:var(--c-text-primary)] hover:text-[color:var(--c-text-secondary)]'}`}>
-            {label}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
-/** Filtros de uma escolha: um marcado por vez, sem ícone. Usa o estilo do FilterTag do design system. */
-function FilterBar({ groups, value, onPick }) {
-  return (
-    <div className="flex flex-col gap-4" role="group" aria-label={t('Filtros')}>
-      {groups.map((g) => (
-        <div key={g.label} className="flex flex-col gap-2">
-          <span className="st-label-md muted">{g.label.toUpperCase()}</span>
-          <div className="flex flex-wrap gap-2">
-            {g.items.map(({ id, label }) => (
-              <button key={id} type="button" aria-pressed={value === id} onClick={() => onPick(id)} className="sv sv-filtertag">{label}</button>
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
 
 const Header = ({ kicker, title, children }) => (
   <header className="chead">
@@ -67,33 +33,34 @@ const Swatch = ({ name, value, token, note }) => (
 );
 
 /* ---------------- Tokens ---------------- */
-const TOKEN_FILTERS = [
-  { label: 'Cores primitivas', items: FAMILIES.map((f) => ({ id: `p-${f}`, label: f })) },
-  { label: 'Cores semânticas', items: SEMANTIC_GROUPS.map((g) => ({ id: `s-${g}`, label: g })) },
-  { label: 'Escalas', items: [{ id: 'x-space', label: 'Espaçamento' }, { id: 'x-radius', label: 'Raio de borda' }, { id: 'x-shadow', label: 'Sombras' }] },
-];
-
 function Tokens({ pick }) {
-  const [kind, key] = [pick.slice(0, 1), pick.slice(2)];
-  if (kind === 'p') {
-    const items = Object.entries(primitives).filter(([k]) => family(k) === key);
+  if (pick === 'primitivas') {
     return (
       <article className="component">
-        <Header kicker={`TOKENS / ${t('Cores primitivas').toUpperCase()}`} title={key}>{t('A paleta base. Clique numa cor para copiar o valor. Os componentes não usam estas cores direto: usam as semânticas, que apontam para elas.')}</Header>
-        <div className="swatches">{items.map(([k, v]) => <Swatch key={k} name={k} value={v} token={`--${k}`} />)}</div>
+        <Header kicker="TOKENS" title={t('Cores primitivas')}>{t('A paleta base. Clique numa cor para copiar o valor. Os componentes não usam estas cores direto: usam as semânticas, que apontam para elas.')}</Header>
+        {FAMILIES.map((f) => (
+          <section key={f}>
+            <h4>{f.toUpperCase()}</h4>
+            <div className="swatches">{Object.entries(primitives).filter(([k]) => family(k) === f).map(([k, v]) => <Swatch key={k} name={k} value={v} token={`--${k}`} />)}</div>
+          </section>
+        ))}
       </article>
     );
   }
-  if (kind === 's') {
-    const items = Object.entries(semantic).filter(([k]) => k.startsWith(`${key}-`));
+  if (pick === 'semanticas') {
     return (
       <article className="component">
-        <Header kicker={`TOKENS / ${t('Cores semânticas').toUpperCase()}`} title={key}>{t('Papéis de cor lidos pelos componentes. Cada um aponta para uma cor primitiva, então trocar a paleta não exige mexer nos componentes.')}</Header>
-        <div className="swatches">{items.map(([k, v]) => <Swatch key={k} name={k} value={resolve(v)} token={`--${k}`} note={`→ ${v}`} />)}</div>
+        <Header kicker="TOKENS" title={t('Cores semânticas')}>{t('Papéis de cor lidos pelos componentes. Cada um aponta para uma cor primitiva, então trocar a paleta não exige mexer nos componentes.')}</Header>
+        {SEMANTIC_GROUPS.map((g) => (
+          <section key={g}>
+            <h4>{g.toUpperCase()}</h4>
+            <div className="swatches">{Object.entries(semantic).filter(([k]) => k.startsWith(`${g}-`)).map(([k, v]) => <Swatch key={k} name={k} value={resolve(v)} token={`--${k}`} note={`→ ${v}`} />)}</div>
+          </section>
+        ))}
       </article>
     );
   }
-  if (key === 'space') {
+  if (pick === 'espaco') {
     return (
       <article className="component">
         <Header kicker="TOKENS" title={t('Espaçamento')}>{t('Escala de espaçamento em pixels. Use sempre um destes valores para margens, vãos e preenchimentos.')}</Header>
@@ -101,7 +68,7 @@ function Tokens({ pick }) {
       </article>
     );
   }
-  if (key === 'radius') {
+  if (pick === 'raio') {
     return (
       <article className="component">
         <Header kicker="TOKENS" title={t('Raio de borda')}>{t('Cantos arredondados. O botão usa o raio de pílula; campos e cartões usam o médio.')}</Header>
@@ -122,7 +89,6 @@ function Tokens({ pick }) {
 }
 
 /* ---------------- Estilos de texto ---------------- */
-const STYLE_FILTERS = [{ label: 'Grupos', items: STYLE_GROUPS.map((g) => ({ id: g, label: g })) }];
 const STYLE_NOTE = {
   display: { pt: 'Números e títulos de maior destaque.', en: 'Largest numbers and headings.' },
   title: { pt: 'Títulos de página e de seção.', en: 'Page and section titles.' },
@@ -132,10 +98,11 @@ const STYLE_NOTE = {
 };
 
 function Styles({ pick }) {
+  const g = STYLE_GROUPS.includes(pick) ? pick : STYLE_GROUPS[0];
   return (
     <article className="component">
-      <Header kicker={`TOKENS / ${t('Estilos de texto').toUpperCase()}`} title={pick}>{tx(STYLE_NOTE[pick])} {t('Família Inter. Cada estilo vira uma classe, por exemplo .t-title-lg.')}</Header>
-      {Object.entries(textStyles).filter(([k]) => k.startsWith(`${pick}-`)).map(([k, [size, line, weight, ls]]) => (
+      <Header kicker={t('ESTILOS DE TEXTO')} title={g.charAt(0).toUpperCase() + g.slice(1)}>{tx(STYLE_NOTE[g])} {t('Família Inter. Cada estilo vira uma classe, por exemplo .t-title-lg.')}</Header>
+      {Object.entries(textStyles).filter(([k]) => k.startsWith(`${g}-`)).map(([k, [size, line, weight, ls]]) => (
         <div className="card pad spec" key={k}>
           <span className={`t-${k}`}>{t('Telhados que duram, com orçamento claro')}</span>
           <span className="mono muted">.t-{k} · Inter · {size}/{line} · {t('peso')} {weight}{ls ? ` · ${ls}` : ''}</span>
@@ -146,8 +113,6 @@ function Styles({ pick }) {
 }
 
 /* ---------------- Componentes ---------------- */
-const COMPONENT_FILTERS = CATEGORIES.map(([id, label]) => ({ label, items: DOCS.filter((d) => d.cat === id).map((d) => ({ id: d.name, label: d.name })) }));
-
 function Component({ pick }) {
   const d = DOCS.find((x) => x.name === pick) || DOCS[0];
   const cat = CATEGORIES.find(([id]) => id === d.cat)[1];
@@ -175,30 +140,23 @@ function Component({ pick }) {
   );
 }
 
-const TABS = [
-  ['tokens', 'Tokens', Tokens, TOKEN_FILTERS, 'p-primary'],
-  ['estilos', 'Estilos de texto', Styles, STYLE_FILTERS, 'display'],
-  ['componentes', 'Componentes', Component, COMPONENT_FILTERS, 'Button'],
+/* ---------------- Páginas da Wiki ---------------- */
+const page = (Comp, id) => function DesignSystemPage({ target }) {
+  useLang();
+  return <div className="dsx"><DSScope /><Comp pick={target?.[id]} /></div>;
+};
+
+const TOKEN_ITEMS = [
+  { id: 'primitivas', label: 'Cores primitivas' }, { id: 'semanticas', label: 'Cores semânticas' },
+  { id: 'espaco', label: 'Espaçamento' }, { id: 'raio', label: 'Raio de borda' }, { id: 'sombra', label: 'Sombras' },
 ];
 
-export function DesignSystemPage() {
-  useLang();
-  const [tab, setTab] = useState('tokens');
-  const [pick, setPick] = useState(Object.fromEntries(TABS.map(([id, , , , first]) => [id, first])));
-  const [, , Cur, filters] = TABS.find(([id]) => id === tab);
-  const groups = filters.map((g) => ({ ...g, label: tx(g.label), items: g.items.map((i) => ({ ...i, label: tx(i.label) })) }));
-  return (
-    <div className="doc dsx">
-      <DSScope />
-      <h2 className="st-headline-bold-40">{t('Design system')} · SkyeVantage</h2>
-      <p>{t('Tokens, estilos de texto e componentes do SkyeVantage ERP, instalados do pacote skyevantage-design-system (v0.1.0).')}</p>
-      <TabBar tabs={TABS.map(([id, label]) => ({ id, label: t(label) }))} value={tab} onChange={setTab} />
-      <div className="grid items-start gap-6 lg:grid-cols-[190px_minmax(0,1fr)]">
-        <div className="lg:sticky lg:top-[calc(var(--top-h,0px)+16px)] lg:max-h-[calc(100vh-var(--top-h,0px)-32px)] lg:overflow-auto">
-          <FilterBar groups={groups} value={pick[tab]} onPick={(id) => setPick((p) => ({ ...p, [tab]: id }))} />
-        </div>
-        <Cur pick={pick[tab]} />
-      </div>
-    </div>
-  );
-}
+/** Entram em WIKI_PAGES, logo depois de “Como usar” e “Processo”. */
+export const DS_WIKI_PAGES = [
+  { id: 'ds-tokens', label: 'Tokens', after: 'como', def: 'primitivas', groups: [{ id: 'tokens', items: TOKEN_ITEMS }], Component: page(Tokens, 'ds-tokens') },
+  { id: 'ds-estilos', label: 'Estilos de texto', after: 'como', def: 'display', groups: [{ id: 'estilos', items: STYLE_GROUPS.map((g) => ({ id: g, label: g.charAt(0).toUpperCase() + g.slice(1) })) }], Component: page(Styles, 'ds-estilos') },
+  {
+    id: 'ds-componentes', label: 'Componentes', after: 'como', def: DOCS[0].name, Component: page(Component, 'ds-componentes'),
+    groups: CATEGORIES.map(([id, label]) => ({ id, label: label.pt, items: DOCS.filter((d) => d.cat === id).map((d) => ({ id: d.name, label: d.name })) })),
+  },
+];
