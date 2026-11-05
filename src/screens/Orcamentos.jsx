@@ -1,5 +1,7 @@
+import { t, useLang } from '../i18n.js';
 import { Shell, Table, Tag } from '../components/Shell.jsx';
 export function Orcamentos({ go }) {
+  useLang();
   return (
     <Shell active="orcamentos" go={go} title="Orçamentos" action="Novo orçamento">
       <Table
@@ -11,7 +13,7 @@ export function Orcamentos({ go }) {
           ['#1039', 'Paulo Menezes', '95 m²', 'R$ 11.750', <Tag>Recusado</Tag>],
         ]}
       />
-      <button onClick={() => go('projetos')} className="mt-4 text-sm underline">Ver projetos dos orçamentos aprovados</button>
+      <button onClick={() => go('projetos')} className="mt-4 text-sm underline">{t('Ver projetos dos orçamentos aprovados')}</button>
     </Shell>
   );
 }

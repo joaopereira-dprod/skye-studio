@@ -1,10 +1,12 @@
+import { t, useLang } from '../i18n.js';
 import { Shell, Table, Tag } from '../components/Shell.jsx';
 export function Leads({ go }) {
+  useLang();
   return (
     <Shell active="leads" go={go} title="Leads e clientes" action="Novo lead">
       <div className="mb-4 flex gap-2">
-        <input className="h-10 w-80 rounded border border-neutral-300 bg-white px-3 text-sm" placeholder="Buscar por nome ou telefone" />
-        <button className="h-10 rounded border border-neutral-300 bg-white px-4 text-sm">Todos os status</button>
+        <input className="h-10 w-80 rounded border border-neutral-300 bg-white px-3 text-sm" placeholder={t('Buscar por nome ou telefone')} />
+        <button className="h-10 rounded border border-neutral-300 bg-white px-4 text-sm">{t('Todos os status')}</button>
       </div>
       <Table
         cols={['Nome', 'Contato', 'Origem', 'Status', 'Sistema']}
@@ -15,7 +17,7 @@ export function Leads({ go }) {
           ['Ana Beatriz Lopes', '(41) 99999-0071', 'Instagram', <Tag>Visita agendada</Tag>, 'Skye Curitiba'],
         ]}
       />
-      <button onClick={() => go('orcamentos')} className="mt-4 text-sm underline">Ver orçamentos deste lead</button>
+      <button onClick={() => go('orcamentos')} className="mt-4 text-sm underline">{t('Ver orçamentos deste lead')}</button>
     </Shell>
   );
 }
